@@ -1,0 +1,785 @@
+<div class="app-container">
+  <!-- Left Side: Configuration Panel -->
+  <div class="config-panel" [style.width.px]="configPanelWidth">
+    <header class="panel-header">
+      <div class="header-logo-title">
+        <span class="logo-emoji">✨</span>
+        <div>
+          <h1>આમંત્રણ પત્રિકા જનરેટર</h1>
+          <p class="subtitle">Invitation Card Configurator</p>
+        </div>
+      </div>
+      <div class="excel-status-card" [class.loaded]="isExcelLoaded">
+        <div class="status-indicator"></div>
+        <div class="status-details">
+          <strong>સભાસદ યાદી (Excel)</strong>
+          <span *ngIf="isExcelLoaded" class="status-msg">સફળતાપૂર્વક લોડ થયેલ છે ({{ members.length }} સભ્યો)</span>
+          <span *ngIf="!isExcelLoaded" class="status-msg">ડિફોલ્ટ ફાઇલ લોડ થઈ રહી છે...</span>
+        </div>
+        <div class="excel-btn-group">
+          <button class="excel-template-btn" (click)="downloadSampleExcel()" title="ખાલી Excel ટેમ્પ્લેટ ડાઉનલોડ કરો">📥 ટેમ્પ્લેટ</button>
+          <label class="excel-upload-btn">
+            અપલોડ
+            <input type="file" (change)="onExcelUpload($event)" accept=".xlsx, .xls" style="display: none;" />
+          </label>
+        </div>
+      </div>
+    </header>
+
+    <div class="scrollable-config-content">
+      <!-- SAVED CONFIGURATIONS MANAGER -->
+      <section class="config-section card config-manager-card">
+        <div class="section-title">
+          <span class="badge" style="background: #3b82f6;">💾</span>
+          <h2>કન્ફિગરેશન મેનેજર (Saved Configurations)</h2>
+        </div>
+
+        <div class="save-config-form">
+          <div class="form-group flex-grow">
+            <label>નવું કન્ફિગરેશન સાચવો (Save Current Configuration)</label>
+            <div class="input-btn-group">
+              <input 
+                type="text" 
+                placeholder="કન્ફિગરેશનનું નામ લખો..." 
+                [(ngModel)]="newConfigName" 
+                (keyup.enter)="saveCurrentConfig()"
+              />
+              <button class="btn-save" (click)="saveCurrentConfig()">સાચવો (Save)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Export/Import configurations for sharing across browsers -->
+        <div class="config-share-row">
+          <button class="btn-export" (click)="exportConfigs()" title="કન્ફિગરેશન્સ ફાઇલમાં ડાઉનલોડ કરો">📥 નિકાસ (Export)</button>
+          <label class="btn-import" title="ફાઇલમાંથી કન્ફિગરેશન્સ લોડ કરો">
+            📤 આયાત (Import JSON)
+            <input type="file" (change)="importConfigs($event)" accept=".json" style="display: none;" />
+          </label>
+        </div>
+
+        <!-- Saved Configurations List -->
+        <div class="saved-configs-list" *ngIf="savedConfigs.length > 0">
+          <div class="config-items-container">
+            <div 
+              *ngFor="let config of savedConfigs; let idx = index" 
+              class="config-item"
+              (click)="loadConfig(config)"
+              title="કન્ફિગરેશન લોડ કરવા ક્લિક કરો"
+            >
+              <div class="config-info">
+                <span class="config-name">✨ {{ config.name }}</span>
+                <span class="config-date">{{ config.date }}</span>
+              </div>
+              <button 
+                class="btn-delete-config" 
+                (click)="deleteConfig(idx, $event)" 
+                title="કન્ફિગરેશન કાઢી નાખો"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="savedConfigs.length === 0" class="empty-configs-msg">
+          કોઈ કન્ફિગરેશન સાચવેલ નથી. ઉપર નામ લખીને સેવ કરો.
+        </div>
+      </section>
+
+      <!-- Draggable configuration sections -->
+      <div 
+        *ngFor="let sec of configSections; let secIdx = index" 
+        draggable="true" 
+        [class.dragging]="draggedSectionIndex === secIdx"
+        [class.drag-over]="draggedOverSectionIndex === secIdx && draggedSectionIndex !== secIdx"
+        (dragstart)="onSectionDragStart(secIdx)" 
+        (dragover)="onSectionDragOver($event, secIdx)" 
+        (dragleave)="onSectionDragLeave()"
+        (dragend)="onSectionDragEnd()"
+        (drop)="onSectionDrop(secIdx)"
+        class="draggable-section-wrapper"
+      >
+        <ng-container [ngSwitch]="sec">
+          <!-- SECTION 1: HEADER CONFIG -->
+          <section *ngSwitchCase="'header'" class="config-section card">
+            <div class="section-title-container drag-handle-container">
+              <div class="section-actions-left">
+                <button class="section-toggle-btn" type="button" (click)="toggleSection('header')" [attr.aria-expanded]="isSectionExpanded('header')" title="સektion ખોલો / બંધ કરો">{{ isSectionExpanded('header') ? '▾' : '▸' }}</button>
+                <div class="section-title">
+                  <span class="badge">1</span>
+                  <h2>મુખ્ય શીર્ષક અને સમયપત્રક (Header Config)</h2>
+                </div>
+              </div>
+              <div class="section-actions-right">
+                <span class="drag-handle-dots" title="કાર્ડને ખસેડવા ખેંચો (Drag card to reorder)">⋮⋮</span>
+              </div>
+            </div>
+            
+            <div class="section-body" *ngIf="isSectionExpanded('header')">
+            <div class="grid-2-col">
+              <div class="form-group">
+                <label>ટ્રસ્ટનું નામ</label>
+                <input type="text" [(ngModel)]="headerConfig.trustName" />
+              </div>
+              <div class="form-group">
+                <label>આયોજક સંસ્થા</label>
+                <input type="text" [(ngModel)]="headerConfig.organizer" />
+              </div>
+            </div>
+
+            <div class="grid-2-col">
+              <div class="form-group">
+                <label>કાર્યક્રમ શીર્ષક</label>
+                <input type="text" [(ngModel)]="headerConfig.eventTitle" />
+              </div>
+              <div class="form-group">
+                <label>સંવત / તિથિ વિગત</label>
+                <input type="text" [(ngModel)]="headerConfig.samvatText" />
+              </div>
+            </div>
+
+            <div class="grid-2-col">
+              <div class="form-group">
+                <label>તારીખ</label>
+                <input type="text" [(ngModel)]="headerConfig.dateText" />
+              </div>
+              <div class="form-group">
+                <label>આમંત્રણ સંદેશ</label>
+                <input type="text" [(ngModel)]="headerConfig.eventIntro" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>મુખ્ય હાઇલાઇટ્સ બેનર</label>
+              <input type="text" [(ngModel)]="headerConfig.bannerText" />
+            </div>
+
+            <!-- Dynamic Timings List Editor -->
+            <div class="section-subtitle-container" style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0 10px 0; border-bottom: 1px solid #334155; padding-bottom: 6px;">
+              <span style="font-size: 12px; color: #ffb300; font-weight: 600;">કાર્યક્રમ સમયપત્રક (Event Schedule)</span>
+              <button class="btn-add-item" (click)="addProgramTiming()">+ ઉમેરો</button>
+            </div>
+
+            <div class="dynamic-inputs-container" style="margin-bottom: 15px;">
+              <div 
+                *ngFor="let timing of programTimings; let i = index" 
+                class="dynamic-row"
+                draggable="true"
+                [class.row-dragging]="draggedRowIndex === i && draggedRowType === 'timing'"
+                [class.row-drag-over]="draggedOverRowIndex === i && draggedOverRowType === 'timing' && draggedRowIndex !== i"
+                (dragstart)="onRowDragStart(i, 'timing')"
+                (dragover)="onRowDragOver($event, i, 'timing')"
+                (dragleave)="onRowDragLeave()"
+                (dragend)="onRowDragEnd()"
+                (drop)="onRowDrop(i, 'timing')"
+              >
+                <span class="row-drag-handle" title="ક્રમ બદલવા ખેંચો (Drag to reorder rows)">⋮⋮</span>
+                <span class="row-num">{{ i + 1 }}</span>
+                <div class="form-group flex-2" style="margin-bottom: 0;">
+                  <input type="text" placeholder="શીર્ષક (Title)" [(ngModel)]="timing.title" (change)="onLayoutChanged()" />
+                </div>
+                <div class="form-group flex-3" style="margin-bottom: 0;">
+                  <input type="text" placeholder="સમય / વિગત (Value)" [(ngModel)]="timing.value" (change)="onLayoutChanged()" />
+                </div>
+                <button class="btn-delete" (click)="removeProgramTiming(i)" title="દૂર કરો">×</button>
+              </div>
+              <div *ngIf="programTimings.length === 0" class="empty-state">કોઈ સમયપત્રક ઉમેરેલ નથી. ઉમેરવા માટે ઉપર ક્લિક કરો.</div>
+            </div>
+
+            <div class="grid-2-col">
+              <div class="form-group">
+                <label>શુભ સ્થળ લેબલ</label>
+                <input type="text" [(ngModel)]="headerConfig.venueLabel" />
+              </div>
+              <div class="form-group">
+                <label>સ્થળ સરનામું</label>
+                <input type="text" [(ngModel)]="headerConfig.venueAddress" />
+              </div>
+            </div>
+
+            <div class="grid-2-col">
+              <div class="form-group">
+                <label>વોટ્સ એપ નોંધ (Page 1 Footer)</label>
+                <input type="text" [(ngModel)]="headerConfig.whatsappNote" />
+              </div>
+              <div class="form-group">
+                <label>સૂત્ર / સ્લોગન</label>
+                <input type="text" [(ngModel)]="headerConfig.sloganText" />
+              </div>
+            </div>
+
+            <!-- Section Toggles -->
+            <div class="visibility-toggles-section">
+              <h3>વિભાગો દર્શાવો/છુપાવો (Show/Hide Sections)</h3>
+              <div class="toggles-grid">
+                <label class="toggle-control">
+                  <input type="checkbox" [(ngModel)]="headerConfig.showPrasadi" (change)="onLayoutChanged()" />
+                  પ્રસાદી સ્પોન્સર (Prasadi Sponsor)
+                </label>
+                <label class="toggle-control">
+                  <input type="checkbox" [(ngModel)]="headerConfig.showKarobariList" (change)="onLayoutChanged()" />
+                  કારોબારી સભ્યોની યાદી (Karobari List)
+                </label>
+                <label class="toggle-control">
+                  <input type="checkbox" [(ngModel)]="headerConfig.showSpecialNote" (change)="onLayoutChanged()" />
+                  ખાસ નોંધ (Special Rules Note)
+                </label>
+                <label class="toggle-control">
+                  <input type="checkbox" [(ngModel)]="headerConfig.showGarbaCelebration" (change)="onLayoutChanged()" />
+                  ગરબા આયોજન (Garba Details)
+                </label>
+                <label class="toggle-control">
+                  <input type="checkbox" [(ngModel)]="headerConfig.showWhatsappReminder" (change)="onLayoutChanged()" />
+                  વોટ્સ એપ અપડેટ નોંધ (WhatsApp Update)
+                </label>
+              </div>
+            </div>
+
+            <!-- Page 2 Footer Fields (shown at bottom of donors pages) -->
+            <div class="section-subtitle-container" style="display: flex; align-items: center; margin: 15px 0 10px 0; border-bottom: 1px solid #334155; padding-bottom: 6px;">
+              <span style="font-size: 12px; color: #94a3b8; font-weight: 600;">📄 Page 2 ના ફૂટર વિગત (Donors Page Footer)</span>
+            </div>
+
+            <div class="form-group" *ngIf="headerConfig.showPrasadi">
+              <label>પ્રસાદી સ્પોન્સર વિગત</label>
+              <input type="text" [(ngModel)]="headerConfig.prasadiText" />
+            </div>
+
+            <div *ngIf="headerConfig.showGarbaCelebration">
+              <div class="form-group">
+                <label>ગરબા રમઝટ ગ્રુપ</label>
+                <input type="text" [(ngModel)]="headerConfig.garbaGroup" />
+              </div>
+
+              <div class="grid-2-col">
+                <div class="form-group">
+                  <label>ગરબા સમયગાળો</label>
+                  <input type="text" [(ngModel)]="headerConfig.garbaPlayTime" />
+                </div>
+                <div class="form-group">
+                  <label>ગરબા શીર્ષક/આયોજન</label>
+                  <input type="text" [(ngModel)]="headerConfig.garbaSubtitle" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group" *ngIf="headerConfig.showSpecialNote">
+              <label>ખાસ નોંધ (નિયમો)</label>
+              <textarea rows="3" [(ngModel)]="headerConfig.specialNote"></textarea>
+            </div>
+
+            <div class="form-group" *ngIf="headerConfig.showWhatsappReminder">
+              <label>વોટ્સ એપ અપડેટ notable (Page 2 Footer)</label>
+              <textarea rows="2" [(ngModel)]="headerConfig.whatsappUpdateNote"></textarea>
+            </div>
+            </div>
+          </section>
+
+          <!-- SECTION 2: MAIN YAJMAN -->
+          <section *ngSwitchCase="'yajmans'" class="config-section card">
+            <div class="section-title-container drag-handle-container">
+              <div class="section-actions-left">
+                <button class="section-toggle-btn" type="button" (click)="toggleSection('yajmans')" [attr.aria-expanded]="isSectionExpanded('yajmans')" title="સektion ખોલો / બંધ કરો">{{ isSectionExpanded('yajmans') ? '▾' : '▸' }}</button>
+                <div class="section-title">
+                  <span class="badge">2</span>
+                  <h2>મુખ્ય યજમાન (Main Yajman)</h2>
+                </div>
+              </div>
+              <div class="section-actions-right">
+                <button class="btn-add-item" (click)="addYajman()">+ ઉમેરો</button>
+                <span class="drag-handle-dots" title="કાર્ડને ખસેડવા ખેંચો (Drag card to reorder)">⋮⋮</span>
+              </div>
+            </div>
+
+            <div class="section-body" *ngIf="isSectionExpanded('yajmans')">
+            <div class="dynamic-inputs-container">
+              <div 
+                *ngFor="let yajman of yajmans; let i = index" 
+                class="dynamic-row"
+                draggable="true"
+                [class.row-dragging]="draggedRowIndex === i && draggedRowType === 'yajman'"
+                [class.row-drag-over]="draggedOverRowIndex === i && draggedOverRowType === 'yajman' && draggedRowIndex !== i"
+                (dragstart)="onRowDragStart(i, 'yajman')"
+                (dragover)="onRowDragOver($event, i, 'yajman')"
+                (dragleave)="onRowDragLeave()"
+                (dragend)="onRowDragEnd()"
+                (drop)="onRowDrop(i, 'yajman')"
+              >
+                <span class="row-drag-handle" title="ક્રમ બદલવા ખેંચો (Drag to reorder rows)">⋮⋮</span>
+                <span class="row-num">{{ i + 1 }}</span>
+                <div class="form-group flex-3 pos-rel">
+                  <input 
+                    type="text" 
+                    placeholder="નામ (શોધો અથવા ટાઈપ કરો)" 
+                    [(ngModel)]="yajman.name" 
+                    (focus)="activeYajmanSearchIndex = i"
+                    (input)="activeYajmanSearchIndex = i"
+                    (blur)="closeAllDropdowns()"
+                  />
+                  
+                  <!-- Autocomplete suggestions -->
+                  <div *ngIf="activeYajmanSearchIndex === i && filteredMembers(yajman.name).length > 0" class="autocomplete-dropdown">
+                    <div 
+                      *ngFor="let member of filteredMembers(yajman.name)" 
+                      class="suggestion-item" 
+                      (mousedown)="selectYajmanMember(i, member)"
+                    >
+                      <span class="item-name">{{ member.Name }}</span>
+                      <span class="item-meta">{{ member.City }} (ID: {{ member.Id }})</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="form-group flex-2">
+                  <input type="text" placeholder="ગામ / શહેર" [(ngModel)]="yajman.city" />
+                </div>
+                <button class="btn-delete" (click)="removeYajman(i)" title="દૂર કરો">×</button>
+              </div>
+              <div *ngIf="yajmans.length === 0" class="empty-state">કોઈ યજમાન ઉમેરેલ નથી. ઉમેરવા માટે ઉપર ક્લિક કરો.</div>
+            </div>
+            </div>
+          </section>
+
+          <!-- SECTION 3: KAROBARI MEMBERS -->
+          <section *ngSwitchCase="'karobari'" class="config-section card">
+            <div class="section-title-container drag-handle-container">
+              <div class="section-actions-left">
+                <button class="section-toggle-btn" type="button" (click)="toggleSection('karobari')" [attr.aria-expanded]="isSectionExpanded('karobari')" title="સektion ખોલો / બંધ કરો">{{ isSectionExpanded('karobari') ? '▾' : '▸' }}</button>
+                <div class="section-title">
+                  <span class="badge">3</span>
+                  <h2>કારોબારી અને સલાહકાર સભ્યો (Karobari Members)</h2>
+                </div>
+              </div>
+              <div class="section-actions-right">
+                <button class="btn-add-item" (click)="addKarobari()">+ ઉમેરો</button>
+                <span class="drag-handle-dots" title="કાર્ડને ખસેડવા ખેંચો (Drag card to reorder)">⋮⋮</span>
+              </div>
+            </div>
+
+            <div class="section-body" *ngIf="isSectionExpanded('karobari')">
+            <div class="dynamic-inputs-container">
+              <div 
+                *ngFor="let karobari of karobariMembers; let i = index" 
+                class="dynamic-row"
+                draggable="true"
+                [class.row-dragging]="draggedRowIndex === i && draggedRowType === 'karobari'"
+                [class.row-drag-over]="draggedOverRowIndex === i && draggedOverRowType === 'karobari' && draggedRowIndex !== i"
+                (dragstart)="onRowDragStart(i, 'karobari')"
+                (dragover)="onRowDragOver($event, i, 'karobari')"
+                (dragleave)="onRowDragLeave()"
+                (dragend)="onRowDragEnd()"
+                (drop)="onRowDrop(i, 'karobari')"
+              >
+                <span class="row-drag-handle" title="Caps">⋮⋮</span>
+                <span class="row-num">{{ i + 1 }}</span>
+                <div class="form-group flex-3 pos-rel">
+                  <input 
+                    type="text" 
+                    placeholder="નામ (શોધો અથવા ટાઈપ કરો)" 
+                    [(ngModel)]="karobari.name" 
+                    (focus)="activeKarobariSearchIndex = i"
+                    (input)="activeKarobariSearchIndex = i"
+                    (blur)="closeAllDropdowns()"
+                  />
+                  
+                  <!-- Autocomplete suggestions -->
+                  <div *ngIf="activeKarobariSearchIndex === i && filteredMembers(karobari.name).length > 0" class="autocomplete-dropdown">
+                    <div 
+                      *ngFor="let member of filteredMembers(karobari.name)" 
+                      class="suggestion-item" 
+                      (mousedown)="selectKarobariMember(i, member)"
+                    >
+                      <span class="item-name">{{ member.Name }}</span>
+                      <span class="item-meta">{{ member.City }} (ID: {{ member.Id }})</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="form-group flex-2">
+                  <input type="text" placeholder="ગામ / શહેર" [(ngModel)]="karobari.city" />
+                </div>
+                <button class="btn-delete" (click)="removeKarobari(i)" title="દૂર કરો">×</button>
+              </div>
+              <div *ngIf="karobariMembers.length === 0" class="empty-state">કોઈ સભ્ય ઉમેરેલ નથી.</div>
+            </div>
+            </div>
+          </section>
+
+          <!-- SECTION 4: DONORS -->
+          <section *ngSwitchCase="'donors'" class="config-section card">
+            <div class="section-title-container drag-handle-container">
+              <div class="section-actions-left">
+                <button class="section-toggle-btn" type="button" (click)="toggleSection('donors')" [attr.aria-expanded]="isSectionExpanded('donors')" title="સektion ખોલો / બંધ કરો">{{ isSectionExpanded('donors') ? '▾' : '▸' }}</button>
+                <div class="section-title">
+                  <span class="badge">4</span>
+                  <h2>દાન / ભેટ આપનાર (Donors List)</h2>
+                </div>
+              </div>
+              <div class="section-actions-right">
+                <button class="btn-add-item" (click)="addDonor()">+ ઉમેરો</button>
+                <span class="drag-handle-dots" title="કાર્ડને ખસેડવા ખેંચો (Drag card to reorder)">⋮⋮</span>
+              </div>
+            </div>
+
+            <div class="section-body" *ngIf="isSectionExpanded('donors')">
+            <div class="dynamic-inputs-container">
+              <div *ngFor="let donor of donors; let i = index" class="dynamic-row">
+                <span class="row-num">{{ i + 1 }}</span>
+                <div class="form-group flex-3 pos-rel">
+                  <input 
+                    type="text" 
+                    placeholder="દાતાનું નામ" 
+                    [(ngModel)]="donor.name" 
+                    (focus)="activeDonorSearchIndex = i"
+                    (input)="activeDonorSearchIndex = i"
+                    (blur)="closeAllDropdowns()"
+                  />
+                  
+                  <!-- Autocomplete suggestions -->
+                  <div *ngIf="activeDonorSearchIndex === i && filteredMembers(donor.name).length > 0" class="autocomplete-dropdown">
+                    <div 
+                      *ngFor="let member of filteredMembers(donor.name)" 
+                      class="suggestion-item" 
+                      (mousedown)="selectDonorMember(i, member)"
+                    >
+                      <span class="item-name">{{ member.Name }}</span>
+                      <span class="item-meta">{{ member.City }} (ID: {{ member.Id }})</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="form-group flex-2">
+                  <input type="text" placeholder="શહેર" [(ngModel)]="donor.city" />
+                </div>
+                
+                <div class="form-group flex-1">
+                  <input type="number" placeholder="રકમ" [(ngModel)]="donor.amount" />
+                </div>
+                <button class="btn-delete" (click)="removeDonor(i)" title="દૂર કરો">×</button>
+              </div>
+              <div *ngIf="donors.length === 0" class="empty-state">કોઈ દાતા ઉમેરેલ નથી.</div>
+            </div>
+
+            <!-- Sorted Donors Grid View inside Config Panel for reference -->
+            <div class="donors-grid-preview" *ngIf="donors.length > 0">
+              <h3>ક્રમબદ્ધ દાતાઓની યાદી (સૌથી વધુ રકમ પ્રથમ)</h3>
+              <div class="donors-table-wrapper">
+                <table class="grid-table">
+                  <thead>
+                    <tr>
+                      <th>ક્રમ</th>
+                      <th>દાતાનું નામ</th>
+                      <th>શહેર</th>
+                      <th class="txt-right">રકમ (₹)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let donor of sortedDonors; let idx = index">
+                      <td>{{ idx + 1 }}</td>
+                      <td>{{ donor.name }}</td>
+                      <td>{{ donor.city }}</td>
+                      <td class="txt-right font-bold">{{ donor.amount }}/-</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            </div>
+          </section>
+
+          <!-- SECTION 4: COMMITTEES -->
+          <section *ngSwitchCase="'committees'" class="config-section card">
+            <div class="section-title-container drag-handle-container">
+              <div class="section-actions-left">
+                <button class="section-toggle-btn" type="button" (click)="toggleSection('committees')" [attr.aria-expanded]="isSectionExpanded('committees')" title="સektion ખોલો / બંધ કરો">{{ isSectionExpanded('committees') ? '▾' : '▸' }}</button>
+                <div class="section-title">
+                  <span class="badge">4</span>
+                  <h2>સભ્ય જૂથો (Committee Groups)</h2>
+                </div>
+              </div>
+              <div class="section-actions-right">
+                <button class="btn-add-item" (click)="addCommitteeGroup()">+ જૂથ ઉમેરો</button>
+                <span class="drag-handle-dots" title="કાર્ડને ખસેડવા ખેંચો (Drag card to reorder)">⋮⋮</span>
+              </div>
+            </div>
+
+            <div class="section-body" *ngIf="isSectionExpanded('committees')">
+            <div *ngIf="committeeGroups.length === 0" class="empty-state" style="margin-bottom:16px;">કોઈ જૂથ ઉમેરેલ નથી. ઉપર + ક્લિક કરો.</div>
+
+            <div *ngFor="let group of committeeGroups; let gi = index" class="committee-group-editor">
+              <!-- Group Header -->
+              <div class="committee-group-header">
+                <input
+                  type="text"
+                  class="committee-group-title-input"
+                  placeholder="જૂથ શીર્ષક (Group Title) – e.g. કારોબારી સભ્યો"
+                  [(ngModel)]="group.groupTitle"
+                  (change)="onLayoutChanged()"
+                />
+                <button class="btn-add-item" (click)="addCommitteeMember(gi)" style="margin-left:6px;">+ સભ્ય</button>
+                <button class="btn-delete" (click)="removeCommitteeGroup(gi)" title="જૂથ દૂર કરો" style="margin-left:4px;">×</button>
+              </div>
+
+              <!-- Members rows -->
+              <div class="dynamic-inputs-container" style="margin-left: 12px; margin-top: 6px; margin-bottom: 12px;">
+                <div *ngFor="let member of group.members; let mi = index" class="dynamic-row">
+                  <span class="row-num">{{ mi + 1 }}</span>
+                  <div class="form-group flex-2" style="margin-bottom:0;">
+                    <input type="text" placeholder="નામ (Name)" [(ngModel)]="member.name" (change)="onLayoutChanged()" />
+                  </div>
+                  <div class="form-group flex-2" style="margin-bottom:0;">
+                    <input type="text" placeholder="હોદ્દો (Role)" [(ngModel)]="member.role" (change)="onLayoutChanged()" />
+                  </div>
+                  <button class="btn-delete" (click)="removeCommitteeMember(gi, mi)" title="સભ્ય દૂર કરો">×</button>
+                </div>
+                <div *ngIf="group.members.length === 0" class="empty-state">કોઈ સભ્ય ઉમેરેલ નથી.</div>
+              </div>
+            </div>
+            </div>
+          </section>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- Generate Action Footer -->
+    <footer class="config-panel-footer">
+      <button class="btn-generate-pdf" [disabled]="isGeneratingPdf" (click)="generatePDF()">
+        <span *ngIf="!isGeneratingPdf">📄 પીડીએફ ડાઉનલોડ કરો (Generate PDF)</span>
+        <span *ngIf="isGeneratingPdf">⏳ પીડીએફ બનાવી રહ્યા છીએ... ({{ pdfProgress }}%)</span>
+      </button>
+    </footer>
+  </div>
+
+  <!-- Resize Handle -->
+  <div 
+    class="resize-handle" 
+    [class.active]="isResizing"
+    (mousedown)="startResizing($event)"
+  >
+    <div class="resize-handle-line"></div>
+  </div>
+
+  <!-- Right Side: Live Invitation Preview (styled standard A4 layouts) -->
+  <div class="preview-panel" #previewPanel>
+    <div class="preview-header">
+      <h2>લાઇવ પ્રિવ્યૂ (Live Print Preview - A4 Pages)</h2>
+      <p>આ વિભાગમાં પ્રિન્ટ થવા પાત્ર પત્રિકાની ડિઝાઇન દેખાય છે.</p>
+    </div>
+
+    <div class="preview-scale-wrapper" [style.transform]="previewScaleTransform" [style.height.px]="scaledHeight">
+      <div class="preview-pages-container" #pagesContainer>
+      
+      <!-- ================= PAGE 1: FRONT INVITATION ================= -->
+      <div id="invitation-page-1" class="invitation-page standard-a4">
+        <!-- Watermark background circle -->
+        <div class="page-watermark">
+          <svg viewBox="0 0 100 100">
+            <path d="M50 25 C65 25, 75 35, 75 48 C75 60, 65 72, 60 85 C55 72, 45 60, 45 48 C45 35, 55 25, 60 25 Z" fill="rgba(230, 81, 0, 0.03)" stroke="rgba(230, 81, 0, 0.05)" stroke-width="1"/>
+          </svg>
+        </div>
+
+        <div class="inner-border">
+          <!-- Top religious slogans and icons -->
+          <div class="page1-top-row">
+            <div class="deity-header-box">
+              <span class="slogan-txt">॥ શ્રી ગણેશાય નમઃ ॥</span>
+              <div class="deity-svg-container">
+                <!-- Ganesha SVG inline -->
+                <svg viewBox="0 0 100 120" class="deity-svg-saffron">
+                  <path d="M50 12 C 65 12, 75 25, 75 40 C 75 55, 60 70, 50 70 C 45 70, 40 68, 38 65" fill="none" stroke="#e65100" stroke-width="3" stroke-linecap="round" />
+                  <path d="M50 25 C 40 25, 30 35, 30 50 C 30 65, 40 75, 50 75 C 55 75, 60 72, 63 68 C 65 65, 66 60, 64 55 C 62 50, 55 45, 50 48" fill="none" stroke="#e65100" stroke-width="3" stroke-linecap="round" />
+                  <path d="M38 30 C 25 35, 20 50, 32 55" fill="none" stroke="#e65100" stroke-width="2.5" stroke-linecap="round" />
+                  <path d="M62 30 C 75 35, 80 50, 68 55" fill="none" stroke="#e65100" stroke-width="2.5" stroke-linecap="round" />
+                  <path d="M42 20 L50 2 L58 20 Z" fill="#d4af37" stroke="#e65100" stroke-width="1" />
+                  <path d="M48 28 Q50 20 52 28 Z" fill="#e65100" />
+                </svg>
+              </div>
+            </div>
+            
+            <div class="deity-header-box main-trust-logo-box">
+              <span class="slogan-txt">॥ શ્રી કનકેશ્વરી પ્રસન્નાડસ્તુ ॥</span>
+              <div class="trust-logo-container">
+                <svg viewBox="0 0 120 120" class="trust-logo-svg">
+                  <circle cx="60" cy="60" r="54" fill="none" stroke="#d4af37" stroke-width="1.5" />
+                  <circle cx="60" cy="60" r="50" fill="none" stroke="#e65100" stroke-width="1" stroke-dasharray="2,2" />
+                  <path d="M60 32 C65 32, 73 40, 73 50 C73 60, 65 70, 60 80 C55 70, 47 60, 47 50 C47 40, 55 32, 60 32 Z" fill="#fffdf0" stroke="#e65100" stroke-width="1" />
+                  <path d="M53 60 C53 66, 67 66, 67 60 Z" fill="#d4af37" stroke="#e65100" stroke-width="0.8" />
+                  <path d="M60 60 Q60 50 62 53 Q60 56 60 60 Z" fill="#ff5722" />
+                  <text x="60" y="24" fill="#e65100" font-size="7.5" font-family="inherit" font-weight="bold" text-anchor="middle">શ્રી ઉનેવાળ</text>
+                  <text x="60" y="94" fill="#e65100" font-size="7.5" font-family="inherit" font-weight="bold" text-anchor="middle">બ્રહ્મસમાજ ટ્રસ્ટ</text>
+                  <text x="60" y="104" fill="#1565c0" font-size="6.5" font-family="inherit" font-weight="bold" text-anchor="middle">વડોદરા</text>
+                </svg>
+              </div>
+            </div>
+
+            <div class="deity-header-box">
+              <span class="slogan-txt">॥ જય મહાકાલ ॥</span>
+              <div class="deity-svg-container">
+                <!-- Shivling SVG inline -->
+                <svg viewBox="0 0 100 120" class="deity-svg-dark">
+                  <path d="M22 80 C22 72, 78 72, 78 80 L73 88 C68 93, 32 93, 27 88 Z" fill="#424242" />
+                  <path d="M16 80 L84 80 C86 80, 86 83, 84 83 L16 83 C14 83, 14 80, 16 80 Z" fill="#616161" />
+                  <path d="M72 80 L92 80 C95 80, 95 83, 92 83 L72 83 Z" fill="#333333" />
+                  <path d="M37 80 C37 42, 63 42, 63 80 Z" fill="#212121" stroke="#424242" stroke-width="1" />
+                  <path d="M44 55 L56 55" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" />
+                  <path d="M42 58 L58 58" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" />
+                  <path d="M44 61 L56 61" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" />
+                  <circle cx="50" cy="58" r="2" fill="#ff1744" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Announcement Body -->
+          <div class="announcement-content">
+            <h2 class="trust-title" *ngIf="headerConfig.trustName && headerConfig.trustName.trim()">{{ headerConfig.trustName }}</h2>
+            <div class="prerit-txt" *ngIf="headerConfig.trustName && headerConfig.trustName.trim() && headerConfig.organizer && headerConfig.organizer.trim()">પ્રેરિત</div>
+            <h2 class="org-title" *ngIf="headerConfig.organizer && headerConfig.organizer.trim()">{{ headerConfig.organizer }}</h2>
+            <div class="dwara-aayojit" *ngIf="headerConfig.organizer && headerConfig.organizer.trim()">દ્વારા આયોજિત</div>
+            
+            <div class="event-title-banner" *ngIf="headerConfig.eventTitle && headerConfig.eventTitle.trim()">
+              {{ headerConfig.eventTitle }}
+            </div>
+
+            <div class="samvat-date-banner" *ngIf="(headerConfig.samvatText && headerConfig.samvatText.trim()) || (headerConfig.dateText && headerConfig.dateText.trim())">
+              <span class="samvat-lbl" *ngIf="headerConfig.samvatText && headerConfig.samvatText.trim()">{{ headerConfig.samvatText }}</span>
+              <span class="date-lbl" *ngIf="headerConfig.dateText && headerConfig.dateText.trim()">{{ headerConfig.dateText }}</span>
+            </div>
+
+            <p class="event-intro-paragraph" *ngIf="headerConfig.eventIntro && headerConfig.eventIntro.trim()">
+              {{ headerConfig.eventIntro }}
+            </p>
+
+            <div class="program-highlights-row" *ngIf="headerConfig.bannerText && headerConfig.bannerText.trim()">
+              {{ headerConfig.bannerText }}
+            </div>
+          </div>
+
+          <!-- Program Timings Grid (Ovals) -->
+          <div class="timings-grid" *ngIf="activeGridTimings.length > 0">
+            <div 
+              *ngFor="let timing of activeGridTimings; let i = index"
+              class="timing-oval-card"
+              [ngClass]="getTimingColorClass(i)"
+            >
+              <span class="oval-title" [ngClass]="getTimingTitleColorClass(i)">{{ timing.title }}</span>
+              <span class="oval-time">{{ timing.value }}</span>
+            </div>
+          </div>
+
+          <!-- Garba timings center banner -->
+          <div 
+            *ngFor="let timing of activeBannerTimings"
+            class="garba-timing-banner"
+          >
+            {{ timing.title }} : {{ timing.value }}
+          </div>
+
+          <!-- Yajman Section (Centered) -->
+          <div class="preview-yajman-section" *ngIf="activeYajmans.length > 0">
+            <div class="yajman-heading">
+              <span class="diamond-icon">❖</span> યજમાન <span class="diamond-icon">❖</span>
+            </div>
+            <div class="yajmans-names-list">
+              <div *ngFor="let yajman of activeYajmans" class="yajman-name-item">
+                {{ yajman.name }} <span class="yajman-city" *ngIf="yajman.city && yajman.city.trim()">- {{ yajman.city }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Committee Grid (dynamic) -->
+          <div class="preview-committees-container" *ngIf="hasCommittees()">
+            <div *ngFor="let group of activeCommitteeGroups; let gi = index" class="committee-row-block">
+              <div class="committee-members-flex">
+                <div *ngFor="let m of group.members" class="committee-member-pill">
+                  <span class="member-name">{{ m.name }}</span>
+                  <span class="member-role" *ngIf="m.role && m.role.trim()">{{ m.role }}</span>
+                </div>
+              </div>
+              <div class="committee-row-divider"></div>
+            </div>
+
+            <!-- Row: Dynamic Karobari Members Footer Title -->
+            <div class="karobari-footer-title" *ngIf="headerConfig.showKarobariList && activeKarobariMembers.length > 0">
+              કારોબારી અને સલાહકાર સભ્યો
+            </div>
+          </div>
+
+          <!-- Footer Info -->
+          <div class="page1-footer-section" *ngIf="(headerConfig.venueAddress && headerConfig.venueAddress.trim()) || (headerConfig.whatsappNote && headerConfig.whatsappNote.trim()) || (headerConfig.sloganText && headerConfig.sloganText.trim())">
+            <div class="shubh-sthal-lbl" *ngIf="headerConfig.venueLabel && headerConfig.venueLabel.trim() && headerConfig.venueAddress && headerConfig.venueAddress.trim()">{{ headerConfig.venueLabel }}</div>
+            <div class="shubh-sthal-val" *ngIf="headerConfig.venueAddress && headerConfig.venueAddress.trim()">{{ headerConfig.venueAddress }}</div>
+            
+            <div class="whatsapp-delivery-note" *ngIf="headerConfig.whatsappNote && headerConfig.whatsappNote.trim()">{{ headerConfig.whatsappNote }}</div>
+            
+            <div class="footer-slogan" *ngIf="headerConfig.sloganText && headerConfig.sloganText.trim()">{{ headerConfig.sloganText }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= PAGE 2+: DONORS LISTS ================= -->
+      <div *ngFor="let donorChunk of chunkedDonors; let chunkIdx = index" class="invitation-page standard-a4 page-donors-list">
+        <div class="inner-border">
+          <header class="donors-page-header" *ngIf="activeDonors.length > 0">
+            <div class="donors-title-block">
+              <span class="flower-icon">❖</span>
+              <h2>દાન/ભેટ આપનાર</h2>
+              <span class="flower-icon">❖</span>
+            </div>
+            <div class="page-num-indicator">પાન ક્રમ : {{ chunkIdx + 2 }}</div>
+          </header>
+
+          <!-- The grid of donors -->
+          <div class="donors-list-layout" *ngIf="donorChunk.length > 0">
+            <div *ngFor="let donor of donorChunk; let idx = index" class="donor-item-row">
+              <span class="donor-amt">{{ donor.amount }}/-</span>
+              <span class="donor-dots">..................................................................................................</span>
+              <span class="donor-name-city">
+                <span class="d-name">{{ donor.name }}</span>
+                <span class="d-city" *ngIf="donor.city && donor.city.trim()">- {{ donor.city }}</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- If it is the LAST page, render the footer information (Prasadi, note, rules) -->
+          <div *ngIf="chunkIdx === chunkedDonors.length - 1 && hasFooterData" class="donors-last-page-footer">
+            
+            <div class="prasadi-banner" *ngIf="headerConfig.showPrasadi && headerConfig.prasadiText && headerConfig.prasadiText.trim()">
+              {{ headerConfig.prasadiText }}
+            </div>
+
+            <!-- Dynamic Karobari list inside Donors last page footer if there are any -->
+            <div class="karobari-members-inline-list" *ngIf="headerConfig.showKarobariList && activeKarobariMembers.length > 0">
+              <strong>કારોબારી સભ્યો:</strong>
+              <span *ngFor="let k of activeKarobariMembers; let isLast = last">
+                {{ k.name }} <span *ngIf="k.city && k.city.trim()">({{ k.city }})</span>{{ !isLast ? ', ' : '' }}
+              </span>
+            </div>
+
+            <div class="rules-card-box" *ngIf="headerConfig.showSpecialNote && headerConfig.specialNote && headerConfig.specialNote.trim()">
+              <p class="rules-paragraph">
+                {{ headerConfig.specialNote }}
+              </p>
+            </div>
+
+            <div class="garba-celebration-box" *ngIf="headerConfig.showGarbaCelebration && (headerConfig.garbaSubtitle.trim() || headerConfig.garbaGroup.trim() || headerConfig.garbaPlayTime.trim())">
+              <p class="org-sub-lbl" *ngIf="headerConfig.trustName && headerConfig.trustName.trim() || headerConfig.garbaSubtitle && headerConfig.garbaSubtitle.trim()">
+                <span *ngIf="headerConfig.trustName && headerConfig.trustName.trim()">{{ headerConfig.trustName }}</span>
+                <span *ngIf="headerConfig.trustName && headerConfig.trustName.trim() && headerConfig.garbaSubtitle && headerConfig.garbaSubtitle.trim()"> ❖ </span>
+                <span *ngIf="headerConfig.garbaSubtitle && headerConfig.garbaSubtitle.trim()">{{ headerConfig.garbaSubtitle }}</span>
+              </p>
+              <p class="garba-grp-lbl" *ngIf="headerConfig.garbaGroup && headerConfig.garbaGroup.trim()">{{ headerConfig.garbaGroup }}</p>
+              <p class="garba-time-lbl" *ngIf="headerConfig.garbaPlayTime && headerConfig.garbaPlayTime.trim()">{{ headerConfig.garbaPlayTime }}</p>
+            </div>
+
+            <div class="whatsapp-reminder-box" *ngIf="headerConfig.showWhatsappReminder && headerConfig.whatsappUpdateNote && headerConfig.whatsappUpdateNote.trim()">
+              {{ headerConfig.whatsappUpdateNote }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+</div>
