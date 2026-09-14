@@ -1,0 +1,6 @@
+{
+  "name": "UBS Invitation Generator",
+  "description": "Generate and customize printable Gujarati invitation cards and donor lists for community events.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
