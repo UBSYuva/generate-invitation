@@ -570,67 +570,52 @@
       <div class="preview-pages-container" #pagesContainer>
       
       <!-- ================= PAGE 1: FRONT INVITATION ================= -->
-      <div id="invitation-page-1" class="invitation-page standard-a4">
-        <!-- Watermark background circle -->
-        <div class="page-watermark">
-          <svg viewBox="0 0 100 100">
-            <path d="M50 25 C65 25, 75 35, 75 48 C75 60, 65 72, 60 85 C55 72, 45 60, 45 48 C45 35, 55 25, 60 25 Z" fill="rgba(230, 81, 0, 0.03)" stroke="rgba(230, 81, 0, 0.05)" stroke-width="1"/>
-          </svg>
-        </div>
-
+      <div id="invitation-page-1" class="invitation-page standard-a4 page-front-card">
         <div class="inner-border">
-          <!-- Top religious slogans and icons -->
+          <!-- Subtle Trust Logo Watermark in Center Background -->
+          <div class="page-watermark">
+            <app-trust-logo [size]="500" [isWatermark]="true" [watermarkColor]="'#d84315'"></app-trust-logo>
+          </div>
+
+          <!-- Top religious slogans and icons (3 Columns) -->
           <div class="page1-top-row">
-            <div class="deity-header-box">
-              <span class="slogan-txt">॥ શ્રી ગણેશાય નમઃ ॥</span>
-              <div class="deity-svg-container">
-                <!-- Ganesha SVG inline -->
-                <svg viewBox="0 0 100 120" class="deity-svg-saffron">
-                  <path d="M50 12 C 65 12, 75 25, 75 40 C 75 55, 60 70, 50 70 C 45 70, 40 68, 38 65" fill="none" stroke="#e65100" stroke-width="3" stroke-linecap="round" />
-                  <path d="M50 25 C 40 25, 30 35, 30 50 C 30 65, 40 75, 50 75 C 55 75, 60 72, 63 68 C 65 65, 66 60, 64 55 C 62 50, 55 45, 50 48" fill="none" stroke="#e65100" stroke-width="3" stroke-linecap="round" />
-                  <path d="M38 30 C 25 35, 20 50, 32 55" fill="none" stroke="#e65100" stroke-width="2.5" stroke-linecap="round" />
-                  <path d="M62 30 C 75 35, 80 50, 68 55" fill="none" stroke="#e65100" stroke-width="2.5" stroke-linecap="round" />
-                  <path d="M42 20 L50 2 L58 20 Z" fill="#d4af37" stroke="#e65100" stroke-width="1" />
-                  <path d="M48 28 Q50 20 52 28 Z" fill="#e65100" />
-                </svg>
-              </div>
-            </div>
-            
-            <div class="deity-header-box main-trust-logo-box">
-              <span class="slogan-txt">॥ શ્રી કનકેશ્વરી પ્રસન્નાડસ્તુ ॥</span>
-              <div class="trust-logo-container">
-                <svg viewBox="0 0 120 120" class="trust-logo-svg">
-                  <circle cx="60" cy="60" r="54" fill="none" stroke="#d4af37" stroke-width="1.5" />
-                  <circle cx="60" cy="60" r="50" fill="none" stroke="#e65100" stroke-width="1" stroke-dasharray="2,2" />
-                  <path d="M60 32 C65 32, 73 40, 73 50 C73 60, 65 70, 60 80 C55 70, 47 60, 47 50 C47 40, 55 32, 60 32 Z" fill="#fffdf0" stroke="#e65100" stroke-width="1" />
-                  <path d="M53 60 C53 66, 67 66, 67 60 Z" fill="#d4af37" stroke="#e65100" stroke-width="0.8" />
-                  <path d="M60 60 Q60 50 62 53 Q60 56 60 60 Z" fill="#ff5722" />
-                  <text x="60" y="24" fill="#e65100" font-size="7.5" font-family="inherit" font-weight="bold" text-anchor="middle">શ્રી ઉનેવાળ</text>
-                  <text x="60" y="94" fill="#e65100" font-size="7.5" font-family="inherit" font-weight="bold" text-anchor="middle">બ્રહ્મસમાજ ટ્રસ્ટ</text>
-                  <text x="60" y="104" fill="#1565c0" font-size="6.5" font-family="inherit" font-weight="bold" text-anchor="middle">વડોદરા</text>
-                </svg>
+            <!-- Left: Ganesha -->
+            <div class="deity-header-box deity-left">
+              <span class="deity-slogan">॥ શ્રી ગણેશાય નમઃ ॥</span>
+              <div class="deity-wrapper">
+                <app-deity-ganesha [width]="68" [height]="72"></app-deity-ganesha>
               </div>
             </div>
 
-            <div class="deity-header-box">
-              <span class="slogan-txt">॥ જય મહાકાલ ॥</span>
-              <div class="deity-svg-container">
-                <!-- Shivling SVG inline -->
-                <svg viewBox="0 0 100 120" class="deity-svg-dark">
-                  <path d="M22 80 C22 72, 78 72, 78 80 L73 88 C68 93, 32 93, 27 88 Z" fill="#424242" />
-                  <path d="M16 80 L84 80 C86 80, 86 83, 84 83 L16 83 C14 83, 14 80, 16 80 Z" fill="#616161" />
-                  <path d="M72 80 L92 80 C95 80, 95 83, 92 83 L72 83 Z" fill="#333333" />
-                  <path d="M37 80 C37 42, 63 42, 63 80 Z" fill="#212121" stroke="#424242" stroke-width="1" />
-                  <path d="M44 55 L56 55" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" />
-                  <path d="M42 58 L58 58" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" />
-                  <path d="M44 61 L56 61" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" />
-                  <circle cx="50" cy="58" r="2" fill="#ff1744" />
-                </svg>
+            <div class="deity-col-separator" aria-hidden="true"></div>
+            
+            <!-- Center: Kanakeshwari Mataji -->
+            <div class="deity-header-box deity-center">
+              <span class="deity-slogan deity-slogan-center">॥ શ્રી કનકેશ્વરી પ્રસન્નાડસ્તુ ॥</span>
+              <div class="deity-wrapper deity-wrapper-center">
+                <app-deity-mataji [width]="68" [height]="72"></app-deity-mataji>
+              </div>
+            </div>
+
+            <div class="deity-col-separator" aria-hidden="true"></div>
+
+            <!-- Right: Mahakaleshwar Shivling -->
+            <div class="deity-header-box deity-right">
+              <span class="deity-slogan">॥ જય મહાકાલ ॥</span>
+              <div class="deity-wrapper">
+                <app-deity-mahakal [width]="68" [height]="72"></app-deity-mahakal>
               </div>
             </div>
           </div>
 
-          <!-- Main Announcement Body -->
+          <!-- Auspicious Ornate Divider Ribbon -->
+          <div class="deity-bottom-ornament">
+            <span class="ornament-line"></span>
+            <span class="ornament-motif">❖ ૐ ❖</span>
+            <span class="ornament-line"></span>
+          </div>
+
+          <!-- Main Announcement Titles -->
           <div class="announcement-content">
             <h2 class="trust-title" *ngIf="headerConfig.trustName && headerConfig.trustName.trim()">{{ headerConfig.trustName }}</h2>
             <div class="prerit-txt" *ngIf="headerConfig.trustName && headerConfig.trustName.trim() && headerConfig.organizer && headerConfig.organizer.trim()">પ્રેરિત</div>
@@ -641,36 +626,40 @@
               {{ headerConfig.eventTitle }}
             </div>
 
-            <div class="samvat-date-banner" *ngIf="(headerConfig.samvatText && headerConfig.samvatText.trim()) || (headerConfig.dateText && headerConfig.dateText.trim())">
-              <span class="samvat-lbl" *ngIf="headerConfig.samvatText && headerConfig.samvatText.trim()">{{ headerConfig.samvatText }}</span>
-              <span class="date-lbl" *ngIf="headerConfig.dateText && headerConfig.dateText.trim()">{{ headerConfig.dateText }}</span>
+            <!-- Red Capsule Banner: Samvat and Date -->
+            <div class="samvat-date-capsule" *ngIf="(headerConfig.samvatText && headerConfig.samvatText.trim()) || (headerConfig.dateText && headerConfig.dateText.trim())">
+              <span *ngIf="headerConfig.samvatText && headerConfig.samvatText.trim()">{{ headerConfig.samvatText }}</span>
+              <span *ngIf="headerConfig.dateText && headerConfig.dateText.trim()">&nbsp;: {{ headerConfig.dateText }}</span>
             </div>
 
             <p class="event-intro-paragraph" *ngIf="headerConfig.eventIntro && headerConfig.eventIntro.trim()">
               {{ headerConfig.eventIntro }}
             </p>
 
-            <div class="program-highlights-row" *ngIf="headerConfig.bannerText && headerConfig.bannerText.trim()">
+            <!-- Blue Capsule Banner: Highlights -->
+            <div class="program-highlights-capsule" *ngIf="headerConfig.bannerText && headerConfig.bannerText.trim()">
               {{ headerConfig.bannerText }}
             </div>
           </div>
 
-          <!-- Program Timings Grid (Ovals) -->
+          <!-- Program Timings Grid (3 Stadium Double-Border Ovals) -->
           <div class="timings-grid" *ngIf="activeGridTimings.length > 0">
             <div 
               *ngFor="let timing of activeGridTimings; let i = index"
-              class="timing-oval-card"
-              [ngClass]="getTimingColorClass(i)"
+              class="timing-stadium-card"
             >
-              <span class="oval-title" [ngClass]="getTimingTitleColorClass(i)">{{ timing.title }}</span>
-              <span class="oval-time">{{ timing.value }}</span>
+              <span class="stadium-badge">{{ timing.title }}</span>
+              <div class="stadium-time-content">
+                <span class="stadium-period" *ngIf="splitTimingLines(timing.value).timeOfDay">{{ splitTimingLines(timing.value).timeOfDay }}</span>
+                <span class="stadium-digits">{{ splitTimingLines(timing.value).timeString }}</span>
+              </div>
             </div>
           </div>
 
           <!-- Garba timings center banner -->
           <div 
             *ngFor="let timing of activeBannerTimings"
-            class="garba-timing-banner"
+            class="garba-timing-pill"
           >
             {{ timing.title }} : {{ timing.value }}
           </div>
@@ -678,7 +667,7 @@
           <!-- Yajman Section (Centered) -->
           <div class="preview-yajman-section" *ngIf="activeYajmans.length > 0">
             <div class="yajman-heading">
-              <span class="diamond-icon">❖</span> યજમાન <span class="diamond-icon">❖</span>
+              ❖ યજમાન ❖
             </div>
             <div class="yajmans-names-list">
               <div *ngFor="let yajman of activeYajmans" class="yajman-name-item">
@@ -687,25 +676,29 @@
             </div>
           </div>
 
-          <!-- Committee Grid (dynamic) -->
+          <!-- Committee Grid (4 Rows with 4 Vertical Orange Diamonds between members) -->
           <div class="preview-committees-container" *ngIf="hasCommittees()">
             <div *ngFor="let group of activeCommitteeGroups; let gi = index" class="committee-row-block">
               <div class="committee-members-flex">
-                <div *ngFor="let m of group.members" class="committee-member-pill">
-                  <span class="member-name">{{ m.name }}</span>
-                  <span class="member-role" *ngIf="m.role && m.role.trim()">{{ m.role }}</span>
-                </div>
+                <ng-container *ngFor="let m of group.members; let mi = index; let isLastMember = last">
+                  <div class="committee-member-item">
+                    <span class="member-name">{{ m.name }}</span>
+                    <span class="member-role" *ngIf="m.role && m.role.trim()">{{ m.role }}</span>
+                  </div>
+                  <div *ngIf="!isLastMember" class="diamond-col" aria-hidden="true">
+                    <span>❖</span><span>❖</span><span>❖</span><span>❖</span>
+                  </div>
+                </ng-container>
               </div>
-              <div class="committee-row-divider"></div>
             </div>
 
-            <!-- Row: Dynamic Karobari Members Footer Title -->
-            <div class="karobari-footer-title" *ngIf="headerConfig.showKarobariList && activeKarobariMembers.length > 0">
+            <!-- Karobari and Advisory Members Title -->
+            <div class="karobari-footer-title" *ngIf="headerConfig.showKarobariList">
               કારોબારી અને સલાહકાર સભ્યો
             </div>
           </div>
 
-          <!-- Footer Info -->
+          <!-- Page 1 Footer Venue and WhatsApp Information -->
           <div class="page1-footer-section" *ngIf="(headerConfig.venueAddress && headerConfig.venueAddress.trim()) || (headerConfig.whatsappNote && headerConfig.whatsappNote.trim()) || (headerConfig.sloganText && headerConfig.sloganText.trim())">
             <div class="shubh-sthal-lbl" *ngIf="headerConfig.venueLabel && headerConfig.venueLabel.trim() && headerConfig.venueAddress && headerConfig.venueAddress.trim()">{{ headerConfig.venueLabel }}</div>
             <div class="shubh-sthal-val" *ngIf="headerConfig.venueAddress && headerConfig.venueAddress.trim()">{{ headerConfig.venueAddress }}</div>
@@ -717,66 +710,69 @@
         </div>
       </div>
 
-      <!-- ================= PAGE 2+: DONORS LISTS ================= -->
+      <!-- ================= PAGE 2+: DONORS LISTS WITH FLORAL TORAN BORDERS ================= -->
       <div *ngFor="let donorChunk of chunkedDonors; let chunkIdx = index" class="invitation-page standard-a4 page-donors-list">
-        <div class="inner-border">
+        <!-- Top Festive Floral Garland / Toran Banner -->
+        <app-floral-border></app-floral-border>
+
+        <!-- Subtle Background Watermark -->
+        <div class="page-watermark">
+          <app-trust-logo [size]="500" [isWatermark]="true" [watermarkColor]="'#d84315'"></app-trust-logo>
+        </div>
+
+        <div class="donors-inner-content">
           <header class="donors-page-header" *ngIf="activeDonors.length > 0">
             <div class="donors-title-block">
-              <span class="flower-icon">❖</span>
-              <h2>દાન/ભેટ આપનાર</h2>
-              <span class="flower-icon">❖</span>
+              <h2>❖ દાન/ભેટ આપનાર ❖</h2>
             </div>
-            <div class="page-num-indicator">પાન ક્રમ : {{ chunkIdx + 2 }}</div>
           </header>
 
-          <!-- The grid of donors -->
+          <!-- Clean 3-Column Donors List (No dots, matches original scan) -->
           <div class="donors-list-layout" *ngIf="donorChunk.length > 0">
-            <div *ngFor="let donor of donorChunk; let idx = index" class="donor-item-row">
-              <span class="donor-amt">{{ donor.amount }}/-</span>
-              <span class="donor-dots">..................................................................................................</span>
-              <span class="donor-name-city">
-                <span class="d-name">{{ donor.name }}</span>
-                <span class="d-city" *ngIf="donor.city && donor.city.trim()">- {{ donor.city }}</span>
-              </span>
+            <div *ngFor="let donor of donorChunk; let idx = index" class="donor-row">
+              <span class="donor-amt">{{ toGujaratiNumber(donor.amount) }}/-</span>
+              <span class="donor-name">{{ donor.name }}</span>
+              <span class="donor-city" *ngIf="donor.city && donor.city.trim()">- {{ donor.city }}</span>
             </div>
           </div>
 
-          <!-- If it is the LAST page, render the footer information (Prasadi, note, rules) -->
+          <!-- If it is the LAST page, render the 4 Footer Boxes -->
           <div *ngIf="chunkIdx === chunkedDonors.length - 1 && hasFooterData" class="donors-last-page-footer">
             
-            <div class="prasadi-banner" *ngIf="headerConfig.showPrasadi && headerConfig.prasadiText && headerConfig.prasadiText.trim()">
+            <!-- Box 1: Prasadi -->
+            <div class="footer-box prasadi-box" *ngIf="headerConfig.showPrasadi && headerConfig.prasadiText && headerConfig.prasadiText.trim()">
               {{ headerConfig.prasadiText }}
             </div>
 
-            <!-- Dynamic Karobari list inside Donors last page footer if there are any -->
-            <div class="karobari-members-inline-list" *ngIf="headerConfig.showKarobariList && activeKarobariMembers.length > 0">
-              <strong>કારોબારી સભ્યો:</strong>
-              <span *ngFor="let k of activeKarobariMembers; let isLast = last">
-                {{ k.name }} <span *ngIf="k.city && k.city.trim()">({{ k.city }})</span>{{ !isLast ? ', ' : '' }}
-              </span>
-            </div>
-
-            <div class="rules-card-box" *ngIf="headerConfig.showSpecialNote && headerConfig.specialNote && headerConfig.specialNote.trim()">
+            <!-- Box 2: Special Educational Prize Rules Note -->
+            <div class="footer-box rules-box" *ngIf="headerConfig.showSpecialNote && headerConfig.specialNote && headerConfig.specialNote.trim()">
               <p class="rules-paragraph">
                 {{ headerConfig.specialNote }}
               </p>
             </div>
 
-            <div class="garba-celebration-box" *ngIf="headerConfig.showGarbaCelebration && (headerConfig.garbaSubtitle.trim() || headerConfig.garbaGroup.trim() || headerConfig.garbaPlayTime.trim())">
-              <p class="org-sub-lbl" *ngIf="headerConfig.trustName && headerConfig.trustName.trim() || headerConfig.garbaSubtitle && headerConfig.garbaSubtitle.trim()">
-                <span *ngIf="headerConfig.trustName && headerConfig.trustName.trim()">{{ headerConfig.trustName }}</span>
-                <span *ngIf="headerConfig.trustName && headerConfig.trustName.trim() && headerConfig.garbaSubtitle && headerConfig.garbaSubtitle.trim()"> ❖ </span>
-                <span *ngIf="headerConfig.garbaSubtitle && headerConfig.garbaSubtitle.trim()">{{ headerConfig.garbaSubtitle }}</span>
-              </p>
-              <p class="garba-grp-lbl" *ngIf="headerConfig.garbaGroup && headerConfig.garbaGroup.trim()">{{ headerConfig.garbaGroup }}</p>
-              <p class="garba-time-lbl" *ngIf="headerConfig.garbaPlayTime && headerConfig.garbaPlayTime.trim()">{{ headerConfig.garbaPlayTime }}</p>
+            <!-- Box 3: Garba Celebration Announcement Box -->
+            <div class="footer-box garba-celebration-box" *ngIf="headerConfig.showGarbaCelebration && (headerConfig.garbaSubtitle.trim() || headerConfig.garbaGroup.trim() || headerConfig.garbaPlayTime.trim())">
+              <div class="garba-trust-line">શ્રી ઉનેવાળ બ્રહ્મસમાજ, વડોદરા - પ્રેરિત - શ્રી ઉનેવાળ બ્રહ્મસમાજ સેવા ટ્રસ્ટ, વડોદરા</div>
+              <div class="garba-mandal-line" *ngIf="headerConfig.garbaSubtitle && headerConfig.garbaSubtitle.trim()">{{ headerConfig.garbaSubtitle }}</div>
+              <div class="garba-grp-line" *ngIf="headerConfig.garbaGroup && headerConfig.garbaGroup.trim()">{{ headerConfig.garbaGroup }}</div>
+              <div class="garba-time-line" *ngIf="headerConfig.garbaPlayTime && headerConfig.garbaPlayTime.trim()">{{ headerConfig.garbaPlayTime }}</div>
             </div>
 
-            <div class="whatsapp-reminder-box" *ngIf="headerConfig.showWhatsappReminder && headerConfig.whatsappUpdateNote && headerConfig.whatsappUpdateNote.trim()">
-              {{ headerConfig.whatsappUpdateNote }}
+            <!-- Box 4: Red WhatsApp Reminder Box -->
+            <div class="footer-box whatsapp-reminder-box" *ngIf="headerConfig.showWhatsappReminder && headerConfig.whatsappUpdateNote && headerConfig.whatsappUpdateNote.trim()">
+              <div class="wa-left">
+                {{ headerConfig.whatsappUpdateNote }}
+              </div>
+              <div class="wa-right">
+                આપ સૌના સહકારની અપેક્ષા સહ
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- Bottom Inverted Festive Floral Garland / Toran Banner -->
+        <app-floral-border [inverted]="true"></app-floral-border>
       </div>
     </div>
   </div>

@@ -4,6 +4,11 @@ import { FormsModule } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { DeityGanesha } from './components/deity-ganesha';
+import { DeityMataji } from './components/deity-mataji';
+import { DeityMahakal } from './components/deity-mahakal';
+import { TrustLogo } from './components/trust-logo';
+import { FloralBorder } from './components/floral-border';
 
 interface Member {
   Id: string;
@@ -47,7 +52,7 @@ interface CommitteeGroup {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DeityGanesha, DeityMataji, DeityMahakal, TrustLogo, FloralBorder],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -90,27 +95,27 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   // Config Section 1 - Header
   headerConfig = {
-    trustName: 'શ્રી ઉનેવાળ બ્રહ્મસમાજ સેવા ટ્રસ્ટ, વડોદરા',
-    organizer: 'શ્રી ઉનેવાળ બ્રહ્મસમાજ, વડોદરા',
-    eventTitle: '૨૯ મો "નવરાત્રી મહોત્સવ" નો કાર્યક્રમ',
-    samvatText: 'સંવત : ૨૦૮૧ આસો સુદ - ૧૩ ને રવિવાર',
-    dateText: 'તા. ૦૫-૧૦-૨૦૨૫',
+    trustName: 'શ્રી ઉનેવાળ બ્રહ્મસમાજ, વડોદરા',
+    organizer: 'શ્રી ઉનેવાળ બ્રહ્મસમાજ સેવા ટ્રસ્ટ, વડોદરા',
+    eventTitle: '૨૯ મો “નવરાત્રી મહોત્સવ” નો કાર્યક્રમ',
+    samvatText: 'સંવત : ૨૦૮૧ આસો સુદ - ૧૩ ને રવિવાર : તા. ૦૫-૧૦-૨૦૨૫',
+    dateText: '',
     eventIntro: 'ના રોજ રાખવામાં આવેલ છે, તો સર્વે જ્ઞાતિબંધુઓને હાજર રહેવા વિનંતી.',
-    bannerText: 'હવન ❖ સાંસ્કૃતિક કાર્યક્રમ ❖ ગરબા મહોત્સવ ❖ સ્નેહ મિલન સંમેલન',
+    bannerText: '❖ હવન ❖ સાંસ્કૃતિક કાર્યક્રમ ❖ ગરબા મહોત્સવ ❖ સ્નેહ મિલન સંમેલન',
     havanTime: 'બપોરે ૨.૩૦ કલાકે',
     sanskrutikTime: 'બપોરે ૧.૩૦ થી ૫.૩૦ કલાકે',
     mahaprasadTime: 'સાંજે ૬.૩૦ કલાકે',
     garbaTime: 'રાત્રે ૭.૦૦ કલાકે',
     venueLabel: ': શુભ સ્થળ :',
     venueAddress: 'લાલબાગ અતિથિગૃહ, માંજલપુર, વડોદરા.',
-    whatsappNote: 'દરેક કાર્યક્રમ ની પત્રિકા ફક્ત "વોટ્સ એપ" દ્વારા જ મોકલવામાં આવશે.',
+    whatsappNote: 'દરેક કાર્યક્રમ ની પત્રિકા ફક્ત “વોટ્સ એપ” દ્વારા જ મોકલવામાં આવશે.',
     sloganText: 'જય ભવાની જય કનકાઈ',
-    specialNote: 'ખાસ નોંધ :- શૈક્ષણિક પારિતોષિક મેળવવા ધો-૧૦ (મીનીમમ ૬૦% ગુણ સાથે), ધો-૧૨ તથા પી.ટી.સી. અને ૩ વર્ષ ડીપ્લોમા તથા સ્નાતક અને અનુસ્નાતક ડીગ્રી (મીનીમમ ૫૦% ગુણ સાથે) ની માર્કશીટ ની ઝેરોક્ષ (What\'s app પર મોકલેલ કોપી માન્ય ગણાશે નહીં) તા. ૨૮ ફેબ્રુઆરી ૨૦૨૬ સુધી કાર્યાલય પર મોકલવાની રહેશે. તા. ૨૮ ફેબ્રુઆરી ૨૦૨૬ પછી આવેલી માર્કશીટ પારિતોષિક મેળવવા માન્ય ગણાશે નહીં.',
+    specialNote: '❖ ખાસ નોંધ :- શૈક્ષણિક પારિતોષિક મેળવવા ધો-૧૦ (મીનીમમ ૬૦% ગુણ સાથે), ધો-૧૨ તથા પી.ટી.સી. અને ૩ વર્ષ ડીપ્લોમા તથા સ્નાતક અને અનુસ્નાતક ડીગ્રી (મીનીમમ ૫૦% ગુણ સાથે) ની માર્કશીટ ની ઝેરોક્ષ (What\'s app પર મોકલેલ કોપી માન્ય ગણાશે નહીં) તા. ૨૮ ફેબ્રુઆરી ૨૦૨૬ સુધી કાર્યાલય પર મોકલવાની રહેશે. તા. ૨૮ ફેબ્રુઆરી ૨૦૨૬ પછી આવેલી માર્કશીટ પારિતોષિક મેળવવા માન્ય ગણાશે નહીં.',
     prasadiText: 'ડ્રાયફ્રુટ ની પ્રસાદી :- શ્રી નિમેષભાઈ હીરાલાલ જોષી - વડોદરા',
     garbaSubtitle: 'મહિલા મંડળ તેમજ યુવક મંડળ દ્વારા આયોજિત ગરબા મહોત્સવ',
     garbaGroup: '“વાત્સલ્ય ગ્રુપ” શ્રી મનોજ જોષી ગરબાની રમઝટ બોલાવશે',
     garbaPlayTime: 'સમય : રાત્રે ૭.૦૦ થી ૧૦.૦૦ કલાકે',
-    whatsappUpdateNote: 'પત્રિકા ફક્ત વોટ્સ એપ ના માધ્યમથી જ મોકલવામાં આવે છે તો કોઈ પણ સભાસદ ના વોટ્સ એપ નંબર સંસ્થાના રેકોર્ડમાં અપડેટ કરવાનો હોય અથવા બાકી હોય તો તે ઉપર જણાવેલ નામ ઉપર સંપર્ક કરીને અપડેટ કરાવી લેવા વિનંતી છે. આપ સૌના સહકારની અપેક્ષા સહ',
+    whatsappUpdateNote: 'પત્રિકા ફક્ત વોટ્સ એપ ના માધ્યમથી જ મોકલવામાં આવે છે તો કોઈપણ સભાસદ ના વોટ્સ એપ નંબર સંસ્થાના રેકોર્ડમાં અપડેટ કરવાનો હોય અથવા બાકી હોય તો તે ઉપર જણાવેલ નામ ઉપર સંપર્ક કરીને અપડેટ કરાવી લેવા વિનંતી છે.    આપ સૌના સહકારની અપેક્ષા સહ',
     showPrasadi: true,
     showKarobariList: true,
     showSpecialNote: true,
@@ -139,31 +144,71 @@ export class AppComponent implements OnInit, AfterViewInit {
     { name: 'શ્રી અશોકકુમાર અમૃતલાલ જોષી', city: 'વડોદરા', amount: 5100 },
     { name: 'શ્રી અંકિતભાઈ ભટ્ટ', city: 'સુરત', amount: 5000 },
     { name: 'શ્રી રાજેન્દ્ર રામકૃષ્ણ શુકલ', city: 'વડોદરા', amount: 3001 },
-    { name: 'વંદનીય શાંતાબા ના સ્મરણાર્થે - હ. સરલાબેન બી. ભટ્ટ', city: 'વડોદરા', amount: 2501 },
     { name: 'શ્રી જ્યોતિન્દ્રભાઈ બી. પુરોહિત', city: 'ઝઘડીયા', amount: 2100 },
     { name: 'શ્રી ભાસ્કરભાઈ મહેતા', city: 'વડોદરા', amount: 2100 },
-    { name: 'શ્રી પ્રહલાદભાઈ કેશવલાલ પંડ્યા - ઉર્ફે દિનેશભાઈ આર. પંડ્યા', city: 'વડોદરા', amount: 2100 },
     { name: 'શ્રી જયેશભાઈ મુકુંદભાઈ પંડ્યા', city: 'વડોદરા', amount: 2001 },
     { name: 'શ્રી તેજસ પ્રહલાદભાઈ પંડ્યા', city: 'વડોદરા', amount: 2001 },
     { name: 'કર્નલ મનુભાઈ જાની', city: 'વડોદરા', amount: 2001 },
     { name: 'શ્રી મિતેશભાઈ જીતેન્દ્રભાઈ પુરોહિત', city: 'ઝઘડીયા', amount: 1501 },
     { name: 'શ્રી રણજીતસિંહ આર. ગોહિલ', city: 'અંકલેશ્વર', amount: 1501 },
+    { name: 'સ્વ. જશવિદ્યાબેન પુરૂષોત્તમ ઠાકર ના સ્મરણાર્થે - હ. રાજેન્દ્રશુકલ', city: 'વડોદરા', amount: 1501 },
     { name: 'દક્ષાબેન હરેશકુમાર વ્યાસ - હ. રાજેન્દ્ર શુકલ', city: 'યુ.કે.', amount: 1501 },
-    { name: 'સ્વ. જશાંવિદ્યાબેન પુરૂષોત્તમ ઠાકર ના સ્મરણાર્થે - હ. રાજેન્દ્ર શુકલ', city: 'વડોદરા', amount: 1501 },
     { name: 'જય નયના ટ્રસ્ટ - હ. રાજેન્દ્ર શુકલ', city: 'કેનેડા', amount: 1501 },
     { name: 'મૃદુલાબેન રાજેશકુમાર જોષી - હ. રાજેન્દ્ર શુકલ', city: 'યુ.કે.', amount: 1501 },
     { name: 'વિદ્યાબેન ચુનીલાલ ઠાકર - હ. રાજેન્દ્ર શુકલ', city: 'યુ.કે.', amount: 1501 },
     { name: 'શ્રી ભરતભાઈ ગુણવંતરાય ઠાકર - હ. જૈમીન ઠાકર', city: 'સુરત', amount: 1501 },
     { name: 'શ્રી નિતિનભાઈ એસ. પુરોહિત', city: 'વડોદરા', amount: 1501 },
-    { name: 'શ્રી નરેન્દ્રભાઈ રતિલાલ ભટ્ટ (બકાભાઈ)', city: 'ડભોઇ', amount: 1501 },
     { name: 'સ્વ. સુધાબેન નવીનચંદ્ર ઠાકર ના સ્મરણાર્થે - હ. નવીનચંદ્ર એ. ઠાકર', city: 'વડોદરા', amount: 1101 },
-    { name: 'શ્રી મહેશભાઈ નારણજી મહેતા', city: 'વડોદરા', amount: 1101 },
     { name: 'શ્રી પાર્થ કનકરાય મહેતા', city: 'કલાલી', amount: 1100 },
     { name: 'શ્રી જયેશભાઈ ગિરીજાશંકર મહેતા', city: 'વડોદરા', amount: 1100 },
     { name: 'શ્રી કલ્પેશકુમાર મદનલાલ ભટ્ટ', city: 'અંકલેશ્વર', amount: 1001 },
     { name: 'શ્રી નલિનભાઈ જેચંદલાલ ભટ્ટ', city: 'ભરૂચ', amount: 1001 },
     { name: 'શ્રી અશોકકુમાર કનૈયાલાલ ઠાકર', city: 'વડોદરા', amount: 1001 },
-    { name: 'શ્રી કલ્પેશ એસ. જોષી', city: 'ઓલપાડ', amount: 1001 }
+    { name: 'શ્રી કલ્પેશ એસ. જોષી', city: 'ઓલપાડ', amount: 1001 },
+    { name: 'શ્રી સુનિલભાઈ નરેન્દ્રભાઈ પુરોહિત', city: 'વડોદરા', amount: 1001 },
+    { name: 'શ્રી રાજેન્દ્ર ચુનીભાઈ ઠાકર - હ. રાજેન્દ્ર શુકલ', city: 'યુ.કે.', amount: 1001 },
+    { name: 'શ્રી રમેશભાઈ ડાહ્યાલાલ ઠાકર', city: 'વડોદરા', amount: 1001 },
+    { name: 'હેમુબેન ચુનીભાઈ ઠાકર - હ. રાજેન્દ્ર શુકલ', city: 'યુ.કે.', amount: 1001 },
+    { name: 'શ્રી અનિલભાઈ સી. ઠાકર - હ. રાજેન્દ્ર શુકલ', city: 'યુ.કે.', amount: 1001 },
+    { name: 'શ્રી ભિષ્મરાજ બિપીનભાઈ પટેલ - હ. રાજેન્દ્ર શુકલ', city: 'આફ્રિકા', amount: 1001 },
+    { name: 'શ્રી ધવલ કનૈયાલાલ પુરોહિત', city: 'શુક્લતીર્થ', amount: 1001 },
+    { name: 'શ્રી પ્રહલાદભાઈ ભોગીલાલ ભટ્ટ', city: 'મોટாஹબીપુરા', amount: 1001 },
+    { name: 'શ્રી રાજેન્દ્રભાઈ અંબાલાલ પંડ્યા', city: 'વડોદરા', amount: 1001 },
+    { name: 'શ્રી દત્તેશકુમાર એન. પાઠક', city: 'વડોદરા', amount: 1001 },
+    { name: 'શ્રી બાલકૃષ્ણ / શ્રી કેતન પાઠક', city: 'વડોદરા', amount: 1001 },
+    { name: 'કનકાઈ ભક્ત', city: 'વડોદરા', amount: 1001 },
+    { name: 'શ્રી દિનેશભાઈ રણછોડલાલ પંડ્યા', city: 'વડોદરા', amount: 1001 },
+    { name: 'શ્રી બિપીનભાઈ વાસુદેવભાઈ ભટ્ટ', city: 'વડોદરા', amount: 1001 },
+    { name: 'શ્રી નિરવ દેવેન્દ્રભાઈ પુરોહિત', city: 'શુક્લતીર્થ', amount: 1001 },
+    { name: 'શ્રી જગદીશભાઈ એચ. પુરોહિત', city: 'વડોદરા', amount: 1001 },
+    { name: 'શ્રી હર્ષદભાઈ એચ. જોષી', city: 'વડોદરા', amount: 1001 },
+    { name: 'શ્રી જ્યોતિન્દ્રભાઈ જે. ભટ્ટ', city: 'વડોદરા', amount: 1001 },
+    { name: 'સ્વ. વસંતલાલ જટાશંકર ઉપાધ્યાય ના સ્મરણાર્થે - હ. મહેશભાઈ ઉપાધ્યાય', city: 'વિધાનગર', amount: 777 },
+    { name: 'સ્વ. જશુમતીબેન ચુનીલાલ જોષી - હ. કિશોરીબેન અમૃતલાલ જોષી', city: 'વડોદરા', amount: 501 },
+    { name: 'શ્રી અતુલભાઈ છગનલાલ જોષી', city: 'વેમાર', amount: 501 },
+    { name: 'શ્રી નિમેષકુમાર કાંતિલાલ પંડ્યા', city: 'વડોદરા', amount: 501 },
+    { name: 'સ્વ. યશોદાબેન કુમુદચંદ્ર ભટ્ટ ના સ્મરણાર્થે હ- કુમુદચંદ્ર ભટ્ટ', city: 'અમદાવાદ', amount: 501 },
+    { name: 'શ્રી પરેશ કૃષ્ણકાંત મહેતા', city: 'સુરત', amount: 501 },
+    { name: 'સ્વ. શાંતાબેન શંકરલાલ ના સ્મરણાર્થે - હ. જયેન્દ્ર એસ ઠાકર', city: 'અમદાવાદ', amount: 501 },
+    { name: 'સ્વ. શંકરલાલ હરીલાલ ના સ્મરણાર્થે - હ. જયેન્દ્ર એસ. ઠાકર', city: 'અમદાવાદ', amount: 501 },
+    { name: 'તનુજાબેન જોષી', city: 'વડોદરા', amount: 501 },
+    { name: 'સ્વ. પ્રવિણાભાઈ સી. જોષી ના સ્મરણાર્થે - હ. પ્રવિણાબેન પી. જોષી', city: 'વડોદરા', amount: 501 },
+    { name: 'શ્રી રજનીકાન્ત જેઠાલાલ ઠાકર', city: 'માતર', amount: 501 },
+    { name: 'શ્રી સત્યમ ભીખાલાલ ઠાકર', city: 'વડોદરા', amount: 501 },
+    { name: 'શ્રી ગોપાલભાઈ સૂર્યકાન્તભાઈ પાઠક - હ. રાજેન્દ્ર શુકલ', city: 'યુ.એસ.એ', amount: 501 },
+    { name: 'શ્રી મહેશકુમાર કાંતીલાલ પંડ્યા', city: 'વડોદરા', amount: 501 },
+    { name: 'શ્રી કનૈયાલાલ વિષ્ણુપ્રસાદ જોષી', city: 'વડોદરા', amount: 501 },
+    { name: 'નીલાબેન કનૈયાલાલ જોષી હ - ગૌતમ જોષી', city: 'વડોદરા', amount: 501 },
+    { name: 'સ્વ. સરલાબેન સતીશચંદ્ર પુરોહિત ના સ્મરણાર્થે - હ. સતીશભાઈ પુરોહિત', city: 'વડોદરા', amount: 501 },
+    { name: 'શ્રી ચેતનભાઈ એન. પાઠક', city: 'વડોદરા', amount: 501 },
+    { name: 'શ્રી મુકુંદભાઈ ચંદ્રદેવ જોષી', city: 'વડોદરા', amount: 501 },
+    { name: 'શ્રી મહેશભાઈ એન. જોષી', city: 'વડોદરા', amount: 501 },
+    { name: 'ભાવનાબેન ભરતભાઈ ઠાકર', city: 'વડોદરા', amount: 501 },
+    { name: 'શ્રી યોગેશભાઈ મધુસૂદન પુરોહિત', city: 'સુરત', amount: 501 },
+    { name: 'શ્રી શૈલેષભાઈ રમેશચંદ્ર પુરોહિત', city: 'વડોદરા', amount: 501 },
+    { name: 'શ્રી મિલિન્દભાઈ સનતકુમાર અધ્વર્યુ', city: 'વડોદરા', amount: 501 },
+    { name: 'સ્વ. રેખાબેન જગદીશભાઈ પંડ્યા - હ. જગદીશભાઈ પી. પંડ્યા', city: 'વડોદરા', amount: 501 },
+    { name: 'શ્રી મનોજભાઈ હર્ષદભાઈ જોષી', city: 'વડોદરા', amount: 501 }
   ];
 
   // Committee Groups - dynamic, user-configurable (replaces fixed executiveCommittee etc.)
@@ -214,8 +259,8 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.programTimings = [
         { title: 'યજ્ઞ આરંભ', value: this.headerConfig.havanTime || 'બપોરે ૨.૩૦ કલાકે' },
         { title: 'સાંસ્કૃતિક કાર્યક્રમ', value: this.headerConfig.sanskrutikTime || 'બપોરે ૧.૩૦ થી ૫.૩૦ કલાકે' },
-        { title: 'મહાપ્રસાદી', value: this.headerConfig.mahaprasadTime || 'સાંજે ૬.૩૦ કલાકે' },
-        { title: 'ગરબા કાર્યક્રમ', value: this.headerConfig.garbaTime || 'રાત્રે ૭.૦૦ કલાકે' }
+        { title: 'અલ્પાહાર', value: this.headerConfig.mahaprasadTime || 'સાંજે ૬.૩૦ કલાકે' },
+        { title: 'ગરબા નો કાર્યક્રમ', value: this.headerConfig.garbaTime || 'રાત્રે ૭.૦૦ કલાકે' }
       ];
     }
 
@@ -224,7 +269,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         {
           groupTitle: 'કારોબારી સભ્યો',
           members: [
-            { name: 'રાજેન્દ્રભાઈ શુક્લ', role: 'પ્રમુખશ્રી' },
+            { name: 'રાજેન્દ્રભાઈ શુકલ', role: 'પ્રમુખશ્રી' },
             { name: 'અશોકભાઈ જોષી', role: 'ઉપપ્રમુખશ્રી' },
             { name: 'મનિષ જોષી', role: 'ઉપપ્રમુખશ્રી' },
             { name: 'રાજેન્દ્રભાઈ પંડ્યા', role: 'મંત્રી' },
@@ -535,6 +580,29 @@ export class AppComponent implements OnInit, AfterViewInit {
     return [...this.activeDonors].sort((a, b) => b.amount - a.amount);
   }
 
+  toGujaratiNumber(num: number | string | undefined | null): string {
+    if (num === null || num === undefined) return '';
+    const str = String(num);
+    const gujaratiDigits = ['૦', '૧', '૨', '૩', '૪', '૫', '૬', '૭', '૮', '૯'];
+    return str.replace(/[0-9]/g, (digit) => gujaratiDigits[parseInt(digit, 10)]);
+  }
+
+  splitTimingLines(val: string): { timeOfDay: string; timeString: string } {
+    if (!val) return { timeOfDay: '', timeString: '' };
+    const trimmed = val.trim();
+    if (trimmed.includes('\n')) {
+      const parts = trimmed.split('\n');
+      return { timeOfDay: parts[0].trim(), timeString: parts.slice(1).join(' ').trim() };
+    }
+    const prefixes = ['બપોરે', 'સાંજે', 'રાત્રે', 'સવારે'];
+    for (const prefix of prefixes) {
+      if (trimmed.startsWith(prefix)) {
+        return { timeOfDay: prefix, timeString: trimmed.substring(prefix.length).trim() };
+      }
+    }
+    return { timeOfDay: '', timeString: trimmed };
+  }
+
   // Dynamic page-height chunking for Donors list:
   // Packs items as tightly as possible on A4 page layout (Page 2, Page 3, Page 4, etc.)
   // and dynamically handles footer elements size when deciding to insert a page break.
@@ -544,49 +612,27 @@ export class AppComponent implements OnInit, AfterViewInit {
       return this.hasFooterData ? [[]] : [];
     }
 
-    // Page height: 297mm = 1122.5px (at standard 96 DPI)
-    // Page padding: 12mm top + 12mm bottom = 24mm = 90.7px
-    // Inner border padding: 10px top + 10px bottom = 20px
-    // Header height: ~45px
-    // Total available height inside inner border for list + footer = 1122.5 - 90.7 - 20 - 45 = 966.8px
-    const totalAvailableHeight = 966.8;
+    const maxItemsPerPage = 40;
 
-    // Estimate footer height on the last page in pixels
-    let footerHeight = 0;
-    if (this.headerConfig.showPrasadi) footerHeight += 45;
-    if (this.headerConfig.showKarobariList && this.activeKarobariMembers.length > 0) {
-      const lineCount = Math.ceil((this.activeKarobariMembers.length * 120) / 700);
-      footerHeight += 20 + Math.max(1, lineCount) * 18;
-    }
-    if (this.headerConfig.showSpecialNote && this.headerConfig.specialNote) {
-      const charCount = this.headerConfig.specialNote.length;
-      const lineCount = Math.ceil(charCount / 95);
-      footerHeight += 20 + Math.max(1, lineCount) * 14;
-    }
-    if (this.headerConfig.showGarbaCelebration) footerHeight += 70;
-    if (this.headerConfig.showWhatsappReminder) footerHeight += 45;
-    
-    if (footerHeight > 0) footerHeight += 20; // margin spacing for footer container
+    let footerEquivalentRows = 0;
+    if (this.headerConfig.showPrasadi && this.headerConfig.prasadiText) footerEquivalentRows += 2;
+    if (this.headerConfig.showSpecialNote && this.headerConfig.specialNote) footerEquivalentRows += 4.5;
+    if (this.headerConfig.showGarbaCelebration) footerEquivalentRows += 4;
+    if (this.headerConfig.showWhatsappReminder) footerEquivalentRows += 2;
 
-    const rowHeight = 16.5; // height of each donor row including list gaps
+    const maxItemsOnFooterPage = Math.max(12, Math.floor(maxItemsPerPage - footerEquivalentRows));
 
     const chunks: DonorInput[][] = [];
     let currentIndex = 0;
 
     while (currentIndex < sorted.length) {
       const remainingItems = sorted.length - currentIndex;
-      const heightWithFooter = (remainingItems * rowHeight) + footerHeight;
-      
-      // If all remaining items can fit on the current page with the footer, do not split.
-      if (heightWithFooter <= totalAvailableHeight) {
+
+      if (remainingItems <= maxItemsOnFooterPage) {
         chunks.push(sorted.slice(currentIndex));
         break;
       } else {
-        // Otherwise, split. This page is NOT the last page, so it does not contain the footer.
-        // It can use all available height for items.
-        const maxItemsOnThisPage = Math.floor(totalAvailableHeight / rowHeight);
-        const chunkSize = Math.max(1, maxItemsOnThisPage - 2); // safety margin
-        
+        const chunkSize = Math.min(maxItemsPerPage, remainingItems);
         chunks.push(sorted.slice(currentIndex, currentIndex + chunkSize));
         currentIndex += chunkSize;
       }

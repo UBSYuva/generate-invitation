@@ -565,14 +565,14 @@ textarea {
 .invitation-page {
   width: 210mm;
   height: 297mm;
-  background: #ffffff;
+  background: radial-gradient(ellipse at 50% 45%, #ffffff 0%, #fffdf8 35%, #fff8eb 70%, #fef2dc 100%);
   color: #333333;
   box-sizing: border-box;
-  padding: 12mm;
+  padding: 10mm;
   position: relative;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  font-family: 'Noto Sans Gujarati', sans-serif;
+  font-family: 'Mukta Vaani', 'Anek Gujarati', 'Noto Sans Gujarati', sans-serif;
   page-break-after: always;
 }
 
@@ -581,26 +581,29 @@ textarea {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 400px;
-  height: 400px;
+  width: 520px;
+  height: 520px;
   pointer-events: none;
-  z-index: 1;
-  opacity: 0.3;
+  z-index: 0;
+  opacity: 0.065;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .inner-border {
-  border: 4px double #e65100;
-  outline: 2px solid #d4af37;
-  outline-offset: -8px;
+  border: 3px double #b71c1c;
+  outline: 1.5px solid #d4af37;
+  outline-offset: -6px;
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  padding: 10px;
+  padding: 8px 10px 10px 10px;
   display: flex;
   flex-direction: column;
   position: relative;
   z-index: 2;
-  background: #ffffff;
+  background: radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.75) 0%, rgba(255, 253, 246, 0.86) 60%, rgba(254, 247, 230, 0.92) 100%);
 }
 
 /* Corner decorations inside inner border */
@@ -608,324 +611,379 @@ textarea {
 .inner-border::after {
   content: '';
   position: absolute;
-  width: 25px;
-  height: 25px;
-  border: 3px solid #d4af37;
+  width: 22px;
+  height: 22px;
+  border: 2.5px solid #d4af37;
   pointer-events: none;
 }
 .inner-border::before {
-  top: 6px;
-  left: 6px;
+  top: 4px;
+  left: 4px;
   border-right: none;
   border-bottom: none;
 }
 .inner-border::after {
-  bottom: 6px;
-  right: 6px;
+  bottom: 4px;
+  right: 4px;
   border-left: none;
   border-top: none;
 }
 
-/* Top slogans and deity SVGs row */
+/* ================= PAGE 1 TOP ROW (DEITIES) ================= */
 .page1-top-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 10px 15px 5px 15px;
-  border-bottom: 1.5px solid rgba(230, 81, 0, 0.15);
+  padding: 8px 12px 6px 12px;
+  position: relative;
+  z-index: 1;
+  background: radial-gradient(ellipse at 50% 20%, rgba(255, 248, 225, 0.7) 0%, rgba(255, 253, 247, 0.4) 60%, rgba(255, 255, 255, 0.2) 100%);
+  border-radius: 6px 6px 0 0;
+}
+
+.deity-col-separator {
+  width: 1px;
+  height: 68px;
+  align-self: center;
+  background: linear-gradient(180deg, transparent 0%, rgba(212, 175, 55, 0.45) 25%, rgba(183, 28, 28, 0.25) 50%, rgba(212, 175, 55, 0.45) 75%, transparent 100%);
+  margin: 0 4px;
+  flex-shrink: 0;
 }
 
 .deity-header-box {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
   flex: 1;
 }
 
-.deity-header-box.main-trust-logo-box {
-  flex: 1.5;
+.deity-slogan {
+  font-size: 10px;
+  font-weight: 800;
+  color: #880e4f; /* Deep Maroon / Crimson */
+  margin-bottom: 4px;
+  letter-spacing: 0.35px;
+  white-space: nowrap;
+  line-height: 1.2;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(255, 248, 225, 0.65);
+  border: 0.8px solid rgba(212, 175, 55, 0.35);
+  box-shadow: 0 1px 2px rgba(212, 175, 55, 0.12);
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.85);
 }
 
-.slogan-txt {
-  font-size: 11px;
-  font-weight: 700;
-  color: #d84315; /* Saffron Red */
-  margin-bottom: 6px;
-  letter-spacing: 0.5px;
+.deity-slogan-center {
+  color: #b71c1c;
+  background: linear-gradient(135deg, rgba(255, 243, 224, 0.92) 0%, rgba(255, 235, 238, 0.82) 100%);
+  border-color: rgba(183, 28, 28, 0.35);
+  box-shadow: 0 1px 3px rgba(183, 28, 28, 0.12);
 }
 
-.deity-svg-container {
-  width: 60px;
-  height: 72px;
-}
-
-.deity-svg-saffron {
+.deity-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  height: 100%;
+  height: 74px;
+  position: relative;
+  background: radial-gradient(ellipse at 50% 75%, rgba(255, 224, 130, 0.25) 0%, rgba(255, 248, 225, 0.1) 55%, transparent 75%);
+  border-radius: 8px;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
-.deity-svg-dark {
+.deity-wrapper:hover {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 3px 6px rgba(212, 175, 55, 0.35));
+}
+
+.deity-wrapper-center {
+  background: radial-gradient(ellipse at 50% 75%, rgba(255, 204, 128, 0.3) 0%, rgba(255, 235, 238, 0.15) 55%, transparent 75%);
+}
+
+/* Auspicious bottom ornament divider */
+.deity-bottom-ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  height: 100%;
+  padding: 2px 14px 4px 14px;
+  gap: 8px;
+  margin-bottom: 2px;
+  position: relative;
+  z-index: 1;
 }
 
-.trust-logo-container {
-  width: 90px;
-  height: 90px;
+.ornament-line {
+  flex: 1;
+  height: 1.2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.6) 20%, #b71c1c 50%, rgba(212, 175, 55, 0.6) 80%, transparent 100%);
 }
 
-.trust-logo-svg {
-  width: 100%;
-  height: 100%;
+.ornament-motif {
+  font-size: 10px;
+  font-weight: 800;
+  color: #b71c1c;
+  letter-spacing: 2px;
+  display: inline-flex;
+  align-items: center;
+  text-shadow: 0 1px 2px rgba(212, 175, 55, 0.4);
 }
 
-/* Main content titles alignment */
 .announcement-content {
   text-align: center;
-  padding: 8px 10px;
+  padding: 4px 6px;
+  position: relative;
+  z-index: 1;
 }
 
 .trust-title {
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 800;
-  color: #c2185b; /* Crimson Pink/Magenta */
-  margin: 5px 0 0 0;
+  color: #c2185b; /* Rich Crimson */
+  margin: 3px 0 0 0;
   letter-spacing: 0.5px;
+  line-height: 1.2;
 }
 
 .prerit-txt {
-  font-size: 13px;
-  color: #7b1fa2;
-  font-weight: 700;
-  margin: 2px 0;
+  font-size: 13.5px;
+  color: #0d47a1;
+  font-weight: 800;
+  margin: 1px 0;
 }
 
 .org-title {
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 21.5px;
+  font-weight: 800;
   color: #c2185b;
   margin: 0;
+  line-height: 1.2;
 }
 
 .dwara-aayojit {
-  font-size: 13px;
-  color: #1976d2;
-  font-weight: 700;
-  margin: 3px 0 5px 0;
+  font-size: 15px;
+  color: #1565c0;
+  font-weight: 800;
+  margin: 2px 0;
 }
 
 .event-title-banner {
-  font-size: 20px;
+  font-size: 18.5px;
   font-weight: 800;
-  color: #0d47a1; /* Royal Blue */
-  margin: 8px auto;
-  max-width: 90%;
-  letter-spacing: 0.5px;
+  color: #0d47a1;
+  margin: 2px auto;
+  letter-spacing: 0.3px;
 }
 
-.samvat-date-banner {
-  background: #d84315; /* Rich Saffron Red-Orange */
-  color: white;
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  padding: 6px 20px;
-  border-radius: 4px;
+/* Red Capsule Banner: Samvat and Date */
+.samvat-date-capsule {
+  background: #c2185b;
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 4px 24px;
   font-weight: 700;
-  font-size: 15px;
-  margin: 8px auto;
-  max-width: 92%;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  font-size: 14.5px;
+  margin: 5px auto;
+  width: fit-content;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .event-intro-paragraph {
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.5;
-  color: #333333;
-  margin: 10px auto;
-  max-width: 90%;
-}
-
-.program-highlights-row {
-  background: #1565c0; /* Blue highlights bar */
-  color: white;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 700;
-  margin: 10px auto;
+  line-height: 1.45;
+  color: #0d47a1;
+  margin: 4px auto;
   max-width: 95%;
-  letter-spacing: 0.5px;
 }
 
-/* Timings oval cards layout */
+/* Blue Capsule Banner: Highlights */
+.program-highlights-capsule {
+  background: #1565c0;
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 4px 22px;
+  font-size: 13.5px;
+  font-weight: 700;
+  margin: 4px auto;
+  width: fit-content;
+  letter-spacing: 0.3px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* ================= TIMINGS SECTION (STADIUM OVALS) ================= */
 .timings-grid {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
-  margin: 10px auto;
-  width: 95%;
-  gap: 15px;
+  align-items: center;
+  gap: 14px;
+  margin: 8px auto 4px auto;
+  width: 98%;
+  position: relative;
+  z-index: 1;
 }
 
-.timing-oval-card {
-  flex: 1 1 calc(33.33% - 15px);
-  min-width: 140px;
-  max-width: 210px;
-  border-radius: 18px;
-  padding: 6px 10px;
+.timing-stadium-card {
+  border: 3px double #1565c0;
+  border-radius: 36px;
+  padding: 10px 14px 8px 14px;
+  background: rgba(255, 255, 255, 0.92);
+  min-width: 175px;
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+  box-shadow: 0 1px 4px rgba(21, 101, 192, 0.08);
+}
+
+.stadium-badge {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #c2185b;
+  color: #ffffff;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 12px;
+  padding: 2px 14px;
+  white-space: nowrap;
+}
+
+.stadium-time-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
+  gap: 1px;
+  margin-top: 1px;
 }
 
-/* Specific borders for Timings card */
-.timing-oval-card.card-red {
-  border: 2px solid #ef5350; /* Red */
-  background: rgba(239, 83, 80, 0.03);
-}
-
-.timing-oval-card.card-blue {
-  border: 2px solid #42a5f5; /* Blue */
-  background: rgba(66, 165, 245, 0.03);
-}
-
-.timing-oval-card.card-gold {
-  border: 2px solid #ffca28; /* Gold */
-  background: rgba(255, 202, 40, 0.03);
-}
-
-.timing-oval-card.card-purple {
-  border: 2px solid #ab47bc; /* Purple */
-  background: rgba(171, 71, 188, 0.03);
-}
-
-.oval-title {
-  font-size: 13px;
+.stadium-period {
+  font-size: 13.5px;
   font-weight: 800;
-  margin-bottom: 3px;
+  color: #0d47a1;
+  line-height: 1.25;
 }
 
-.oval-title.title-red { color: #d32f2f; }
-.oval-title.title-blue { color: #1976d2; }
-.oval-title.title-gold { color: #e65100; }
-.oval-title.title-purple { color: #7b1fa2; }
-
-.oval-time {
-  font-size: 13px;
-  font-weight: 700;
-  color: #212121;
+.stadium-digits {
+  font-size: 14px;
+  font-weight: 800;
+  color: #0d47a1;
+  line-height: 1.25;
 }
 
 /* Garba timeline center banner */
-.garba-timing-banner {
-  background: #ad1457; /* Magenta-Purple */
-  color: white;
-  width: 50%;
-  margin: 10px auto;
-  padding: 5px 15px;
-  font-weight: 700;
-  font-size: 14px;
-  border-radius: 6px;
+.garba-timing-pill {
+  background: #7b1fa2;
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 4px 34px;
+  font-weight: 800;
+  font-size: 14.5px;
+  width: fit-content;
+  margin: 8px auto 4px auto;
   text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
-/* Preview Yajman Section styles */
+/* ================= YAJMAN SECTION ================= */
 .preview-yajman-section {
   text-align: center;
-  margin: 10px auto;
-  width: 90%;
-  padding: 5px;
+  margin: 5px auto 3px auto;
+  width: 95%;
+  padding: 2px;
+  position: relative;
+  z-index: 1;
 }
 
 .yajman-heading {
   font-size: 15px;
   font-weight: 800;
   color: #0d47a1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 6px;
-}
-
-.diamond-icon {
-  color: #e65100;
-  font-size: 12px;
+  margin-bottom: 2px;
 }
 
 .yajmans-names-list {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
 }
 
 .yajman-name-item {
-  font-size: 14px;
-  font-weight: 700;
-  color: #1a237e;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #0d47a1;
+  line-height: 1.4;
 }
 
 .yajman-city {
-  color: #d84315;
-  font-weight: 600;
+  color: #c2185b;
+  font-weight: 700;
 }
 
-/* Committee Lists Grids (Layout exactly like target rows) */
+/* ================= COMMITTEE SECTION ================= */
 .preview-committees-container {
-  margin: 12px auto auto auto;
-  width: 98%;
+  margin: 5px auto 2px auto;
+  width: 99%;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  position: relative;
+  z-index: 1;
 }
 
 .committee-row-block {
   width: 100%;
+  border-bottom: 1.2px solid #c2185b;
+  padding: 3px 0;
 }
 
 .committee-members-flex {
   display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  row-gap: 6px;
-  column-gap: 8px;
-  padding: 2px 0;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
 }
 
-.committee-member-pill {
+.committee-member-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 15%;
-  min-width: 80px;
+  justify-content: center;
   text-align: center;
+  padding: 0 4px;
 }
 
-.committee-member-pill .member-name {
-  font-size: 11px;
-  font-weight: 700;
-  color: #1a237e; /* Royal Blue */
+.committee-member-item .member-name {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #0d47a1;
   white-space: nowrap;
 }
 
-.committee-member-pill .member-role {
+.committee-member-item .member-role {
   font-size: 9.5px;
   font-weight: 700;
-  color: #c2185b; /* Crimson Red */
+  color: #c2185b;
   margin-top: 1px;
   white-space: nowrap;
 }
 
-.committee-row-divider {
-  height: 1.5px;
-  background: linear-gradient(90deg, transparent, #ef5350, transparent);
-  margin-top: 6px;
-  width: 100%;
+.diamond-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  color: #e65100;
+  font-size: 7.5px;
+  line-height: 6.5px;
+  user-select: none;
+  opacity: 0.85;
 }
 
 .karobari-footer-title {
@@ -933,233 +991,215 @@ textarea {
   font-weight: 800;
   color: #0d47a1;
   text-align: center;
-  margin-top: 5px;
-  letter-spacing: 0.5px;
+  margin-top: 4px;
 }
 
-/* Page 1 Footer Venue and Whatsapp */
+/* ================= PAGE 1 FOOTER (VENUE & SLOGANS) ================= */
 .page1-footer-section {
-  border-top: 1.5px solid rgba(230, 81, 0, 0.15);
-  padding-top: 8px;
   margin-top: auto;
   text-align: center;
+  padding-top: 3px;
+  position: relative;
+  z-index: 1;
 }
 
 .shubh-sthal-lbl {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
-  color: #e65100;
-  margin-bottom: 2px;
+  color: #0d47a1;
+  margin-bottom: 1px;
 }
 
 .shubh-sthal-val {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 800;
-  color: #1a237e;
-  margin-bottom: 6px;
+  color: #c2185b;
+  margin-bottom: 2px;
 }
 
 .whatsapp-delivery-note {
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 800;
   color: #c2185b;
-  margin-bottom: 6px;
+  margin-bottom: 2px;
 }
 
 .footer-slogan {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
   color: #0d47a1;
 }
 
 /* ==========================================================================
-   DONORS PAGE LAYOUT (PAGES 2+)
+   DONORS PAGE LAYOUT (PAGES 2+ WITH FLORAL BORDERS & 4 FOOTER BOXES)
    ========================================================================== */
 .page-donors-list {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  padding: 4mm 10mm;
+}
+
+.donors-inner-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 4px 10px;
+  position: relative;
+  z-index: 2;
 }
 
 .donors-page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 2px solid #e65100;
-  padding-bottom: 6px;
-  margin-bottom: 12px;
-}
-
-.donors-title-block {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  text-align: center;
+  border-bottom: 1.5px solid #1565c0;
+  padding-bottom: 4px;
+  margin: 4px 0 6px 0;
 }
 
 .donors-title-block h2 {
-  font-size: 18px;
+  font-size: 16.5px;
   font-weight: 800;
-  color: #e65100;
+  color: #0d47a1;
   margin: 0;
+  display: inline-block;
+  letter-spacing: 0.5px;
 }
 
-.flower-icon {
-  color: #d4af37;
-  font-size: 14px;
-}
-
-.page-num-indicator {
-  font-size: 11px;
-  font-weight: 700;
-  color: #7b1fa2;
-}
-
-/* List details */
+/* Clean 3-column donors rows (Amount, Name, City) matching the original format */
 .donors-list-layout {
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  overflow: hidden;
+  width: 100%;
+  gap: 1px;
 }
 
-.donor-item-row {
+.donor-row {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
+  padding: 1.5px 4px;
   width: 100%;
+  box-sizing: border-box;
+  font-size: 12px;
+  font-weight: 800;
+  color: #0d47a1;
+  line-height: 1.35;
 }
 
 .donor-amt {
-  font-size: 12px;
-  font-weight: 800;
-  color: #e65100;
-  min-width: 55px;
-  text-align: right;
+  width: 76px;
   flex-shrink: 0;
-}
-
-.donor-dots {
-  flex-grow: 1;
-  overflow: hidden;
-  white-space: nowrap;
-  color: rgba(212, 175, 55, 0.4);
-  font-size: 11px;
-  margin: 0 8px;
-  font-weight: 400;
-}
-
-.donor-name-city {
-  display: flex;
-  justify-content: space-between;
-  width: 60%;
-  flex-shrink: 0;
-}
-
-.d-name {
-  font-size: 12px;
-  font-weight: 700;
-  color: #1a237e;
   text-align: left;
 }
 
-.d-city {
-  font-size: 11px;
-  font-weight: 700;
-  color: #1565c0;
-  text-align: right;
-  min-width: 70px;
+.donor-name {
+  flex: 1;
+  text-align: left;
+  padding-right: 8px;
 }
 
-/* Donors Last Page Footer Card info */
+.donor-city {
+  flex-shrink: 0;
+  min-width: 80px;
+  text-align: right;
+}
+
+/* ================= 4 FOOTER CARDS ON LAST PAGE ================= */
 .donors-last-page-footer {
-  border-top: 2px solid #e65100;
-  margin-top: 10px;
-  padding-top: 10px;
-  text-align: center;
+  margin-top: auto;
+  padding-top: 6px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 5px;
 }
 
-.prasadi-banner {
-  background: #1565c0;
-  color: white;
+/* 1. Prasadi Box */
+.prasadi-box {
+  border: 1.5px solid #1565c0;
+  border-radius: 6px;
+  padding: 4.5px 12px;
+  text-align: center;
+  color: #0d47a1;
+  font-weight: 800;
   font-size: 13px;
-  font-weight: 700;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+/* 2. Educational Prize Rules Note */
+.rules-box {
+  border: 1.5px solid #1565c0;
+  border-radius: 6px;
   padding: 6px 12px;
-  border-radius: 4px;
-  margin: 0 auto;
-  width: 90%;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.karobari-members-inline-list {
-  font-size: 11px;
-  color: #333;
-  background: #fdf5e6;
-  border: 1px solid #ffca28;
-  padding: 6px 10px;
-  border-radius: 4px;
-  text-align: left;
-  line-height: 1.4;
-}
-
-.karobari-members-inline-list strong {
-  color: #e65100;
-}
-
-.rules-card-box {
-  background: #fff8e1; /* Light gold background */
-  border-left: 4px solid #ffb300;
-  padding: 8px;
+  color: #0d47a1;
+  font-weight: 700;
+  font-size: 10.2px;
+  line-height: 1.45;
   text-align: justify;
-  border-radius: 0 4px 4px 0;
+  background: rgba(255, 255, 255, 0.95);
 }
 
 .rules-paragraph {
-  font-size: 9.5px;
-  line-height: 1.4;
-  font-weight: 600;
-  color: #c2185b;
   margin: 0;
 }
 
+/* 3. Garba Celebration Announcement Box */
 .garba-celebration-box {
-  border-top: 1px dashed rgba(230, 81, 0, 0.3);
-  border-bottom: 1px dashed rgba(230, 81, 0, 0.3);
-  padding: 6px 0;
+  border: 1.5px solid #1565c0;
+  border-radius: 6px;
+  padding: 5px 12px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.95);
 }
 
-.garba-celebration-box p {
-  margin: 2px 0;
-}
-
-.org-sub-lbl {
-  font-size: 12px;
-  font-weight: 700;
-  color: #e65100;
-}
-
-.garba-grp-lbl {
-  font-size: 13px;
+.garba-trust-line {
+  color: #b71c1c;
   font-weight: 800;
-  color: #c2185b;
-}
-
-.garba-time-lbl {
   font-size: 12px;
-  font-weight: 700;
-  color: #1a237e;
 }
 
+.garba-mandal-line {
+  color: #b71c1c;
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.garba-grp-line {
+  color: #0d47a1;
+  font-weight: 800;
+  font-size: 13.5px;
+  margin: 1px 0;
+}
+
+.garba-time-line {
+  color: #0d47a1;
+  font-weight: 800;
+  font-size: 12.5px;
+}
+
+/* 4. Red WhatsApp Reminder Box */
 .whatsapp-reminder-box {
-  font-size: 10px;
-  font-weight: 700;
   background: #c2185b;
-  color: white;
-  padding: 6px 10px;
-  border-radius: 4px;
-  line-height: 1.4;
+  color: #ffffff;
+  border-radius: 6px;
+  padding: 5px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  font-size: 10.5px;
+  line-height: 1.35;
+  gap: 12px;
+}
+
+.whatsapp-reminder-box .wa-left {
+  flex: 1;
+  text-align: left;
+}
+
+.whatsapp-reminder-box .wa-right {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-weight: 800;
+  font-size: 11px;
 }
 
 /* ==========================================================================
