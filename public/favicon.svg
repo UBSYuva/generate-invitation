@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#991B1B" />
+      <stop offset="50%" stop-color="#7F1D1D" />
+      <stop offset="100%" stop-color="#581C87" />
+    </linearGradient>
+
+    <!-- Gold Gradients -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE68A" />
+      <stop offset="40%" stop-color="#F59E0B" />
+      <stop offset="80%" stop-color="#D97706" />
+      <stop offset="100%" stop-color="#B45309" />
+    </linearGradient>
+
+    <linearGradient id="leafGrad" x1="0%" y1="100%" x2="50%" y2="0%">
+      <stop offset="0%" stop-color="#047857" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FEF08A" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#FEF08A" stop-opacity="0" />
+    </radialGradient>
+
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Base Badge: Rounded Squircle -->
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#bgGrad)" stroke="url(#goldGrad)" stroke-width="4"/>
+  
+  <!-- Subtle Inner Border -->
+  <rect x="9" y="9" width="110" height="110" rx="23" fill="none" stroke="#FEF08A" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="3,2"/>
+
+  <!-- Golden Radial Glow behind Deity/Kalash -->
+  <circle cx="64" cy="62" r="42" fill="url(#glow)"/>
+
+  <!-- Auspicious Kalash & Mango Leaves & Coconut Motif -->
+  <g filter="url(#shadow)">
+    <!-- Mango Leaves (5 Leaves spreading out) -->
+    <!-- Left outer leaf -->
+    <path d="M 64 56 C 50 48 38 42 34 32 C 44 32 56 42 64 56 Z" fill="url(#leafGrad)" stroke="#FDE68A" stroke-width="1"/>
+    <!-- Left inner leaf -->
+    <path d="M 64 56 C 54 44 46 34 48 20 C 58 24 64 40 64 56 Z" fill="url(#leafGrad)" stroke="#FDE68A" stroke-width="1"/>
+    <!-- Center Top leaf -->
+    <path d="M 64 56 C 60 40 58 20 64 12 C 70 20 68 40 64 56 Z" fill="url(#leafGrad)" stroke="#FDE68A" stroke-width="1.2"/>
+    <!-- Right inner leaf -->
+    <path d="M 64 56 C 74 44 82 34 80 20 C 70 24 64 40 64 56 Z" fill="url(#leafGrad)" stroke="#FDE68A" stroke-width="1"/>
+    <!-- Right outer leaf -->
+    <path d="M 64 56 C 78 48 90 42 94 32 C 84 32 72 42 64 56 Z" fill="url(#leafGrad)" stroke="#FDE68A" stroke-width="1"/>
+
+    <!-- Sacred Coconut (Shrifal) on Top -->
+    <ellipse cx="64" cy="38" rx="13" ry="16" fill="#78350F" stroke="url(#goldGrad)" stroke-width="2"/>
+    <!-- Coconut Fiber & Gold Tilak Lines -->
+    <path d="M 64 24 Q 63 38 64 52" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="64" cy="34" r="3.5" fill="#DC2626" stroke="#FEF08A" stroke-width="1"/>
+    <!-- Small Kalawa / Nadachhadi ribbon -->
+    <path d="M 54 46 Q 64 43 74 46" stroke="#DC2626" stroke-width="2.5" fill="none"/>
+    <path d="M 54 48 Q 64 45 74 48" stroke="#FBBF24" stroke-width="1.5" fill="none"/>
+
+    <!-- Kalash Neck / Rim -->
+    <path d="M 48 54 Q 64 51 80 54 L 83 60 Q 64 57 45 60 Z" fill="url(#goldGrad)" stroke="#FEF08A" stroke-width="1"/>
+    
+    <!-- Kalash Pot Body -->
+    <path d="M 45 60 C 34 68 31 82 40 98 C 45 106 54 108 64 108 C 74 108 83 106 88 98 C 97 82 94 68 83 60 Z" fill="url(#goldGrad)" stroke="#FEF08A" stroke-width="1.5"/>
+
+    <!-- Kalash Base Stand -->
+    <path d="M 46 106 Q 64 104 82 106 L 85 112 Q 64 110 43 112 Z" fill="url(#goldGrad)" stroke="#FEF08A" stroke-width="1"/>
+
+    <!-- Sacred Swastik on the Kalash (Auspicious Indian Wedding/Kankotri Symbol) -->
+    <g stroke="#991B1B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <!-- Main Cross -->
+      <line x1="64" y1="72" x2="64" y2="94"/>
+      <line x1="53" y1="83" x2="75" y2="83"/>
+      <!-- Arms -->
+      <line x1="64" y1="72" x2="73" y2="72"/>
+      <line x1="75" y1="83" x2="75" y2="92"/>
+      <line x1="64" y1="94" x2="55" y2="94"/>
+      <line x1="53" y1="83" x2="53" y2="74"/>
+      <!-- Four Sacred Dots -->
+      <circle cx="58" cy="77" r="1.5" fill="#991B1B" stroke="none"/>
+      <circle cx="70" cy="77" r="1.5" fill="#991B1B" stroke="none"/>
+      <circle cx="58" cy="89" r="1.5" fill="#991B1B" stroke="none"/>
+      <circle cx="70" cy="89" r="1.5" fill="#991B1B" stroke="none"/>
+    </g>
+
+    <!-- Subtle Golden Highlights on the Pot -->
+    <path d="M 42 74 C 40 82 43 92 48 98" stroke="#FEF08A" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
+  </g>
+</svg>
