@@ -24,6 +24,45 @@
           </label>
         </div>
       </div>
+
+      <!-- GUJARATI TRANSLITERATION / TYPING TOOLBAR -->
+      <div class="transliteration-toolbar" [class.active]="isAutoTransliterateEnabled">
+        <div class="translit-status">
+          <span class="translit-icon-badge">🔤➜🇬🇺</span>
+          <div class="translit-info">
+            <div class="translit-title">
+              <strong>અંગ્રેજી ➜ ગુજરાતી ટાઈપિંગ</strong>
+              <span class="live-pill" [class.on]="isAutoTransliterateEnabled">
+                {{ isAutoTransliterateEnabled ? 'ચાલુ (Active)' : 'બંધ (Off)' }}
+              </span>
+            </div>
+            <p class="translit-hint">
+              દા.ત. <code>Urvesh</code> લખી સ્પેસ આપતાં <code>ઉર્વેશ</code> થશે
+            </p>
+          </div>
+        </div>
+        <div class="translit-actions">
+          <button 
+            type="button" 
+            class="btn-toggle-translit" 
+            [class.on]="isAutoTransliterateEnabled"
+            (click)="toggleAutoGujarati()"
+            [title]="isAutoTransliterateEnabled ? 'ઓટો ગુજરાતી ટાઈપિંગ બંધ કરો' : 'ઓટો ગુજરાતી ટાઈપિંગ ચાલુ કરો'"
+          >
+            {{ isAutoTransliterateEnabled ? '✓ ચાલુ છે' : 'બંધ છે' }}
+          </button>
+          <button 
+            type="button" 
+            class="btn-convert-all" 
+            (click)="convertAllToGujarati()"
+            [disabled]="isTransliteratingAll"
+            title="જો ફોર્મમાં ક્યાંય અંગ્રેજીમાં લખેલું હોય તો તેને એક ક્લિકથી ગુજરાતીમાં ફેરવો"
+          >
+            <span *ngIf="!isTransliteratingAll">🔄 સમગ્ર ફોર્મ ગુજરાતી કરો</span>
+            <span *ngIf="isTransliteratingAll">⏳ રૂપાંતર થઈ રહ્યું છે...</span>
+          </button>
+        </div>
+      </div>
     </header>
 
     <div class="scrollable-config-content">

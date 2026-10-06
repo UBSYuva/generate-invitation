@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import * as XLSX from 'xlsx';
@@ -9,6 +9,8 @@ import { DeityMataji } from './components/deity-mataji';
 import { DeityMahakal } from './components/deity-mahakal';
 import { TrustLogo } from './components/trust-logo';
 import { FloralBorder } from './components/floral-border';
+import { AutoGujaratiDirective } from './directives/auto-gujarati.directive';
+import { TransliterationService } from './services/transliteration.service';
 
 interface Member {
   Id: string;
@@ -52,12 +54,14 @@ interface CommitteeGroup {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule, DeityGanesha, DeityMataji, DeityMahakal, TrustLogo, FloralBorder],
+  imports: [CommonModule, FormsModule, DeityGanesha, DeityMataji, DeityMahakal, TrustLogo, FloralBorder, AutoGujaratiDirective],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'generate-invite';
+  translitService = inject(TransliterationService);
+  isTransliteratingAll = false;
   members: Member[] = [];
   isExcelLoaded = false;
   isGeneratingPdf = false;
@@ -399,14 +403,80 @@ export class AppComponent implements OnInit, AfterViewInit {
     XLSX.writeFile(workbook, 'members_list_sample.xlsx');
   }
 
+  toggleAutoGujarati() {
+    this.translitService.toggleAutoTransliterate();
+  }
+
+  get isAutoTransliterateEnabled(): boolean {
+    return this.translitService.isAutoTransliterateEnabled;
+  }
+
+  async convertAllToGujarati() {
+    this.isTransliteratingAll = true;
+    try {
+      const headerKeys = [
+        'trustName', 'organizer', 'eventTitle', 'samvatText', 'dateText',
+        'eventIntro', 'bannerText', 'havanTime', 'sanskrutikTime', 'mahaprasadTime',
+        'garbaTime', 'venueLabel', 'venueAddress', 'whatsappNote', 'sloganText',
+        'specialNote', 'prasadiText', 'garbaSubtitle', 'garbaGroup', 'garbaPlayTime',
+        'whatsappUpdateNote'
+      ] as const;
+
+      for (const k of headerKeys) {
+        const val = (this.headerConfig as any)[k];
+        if (typeof val === 'string' && val.trim().length > 0 && /[a-zA-Z]/.test(val)) {
+          (this.headerConfig as any)[k] = await this.translitService.transliterateText(val);
+        }
+      }
+
+      for (const y of this.yajmans) {
+        if (y.name && /[a-zA-Z]/.test(y.name)) y.name = await this.translitService.transliterateText(y.name);
+        if (y.city && /[a-zA-Z]/.test(y.city)) y.city = await this.translitService.transliterateText(y.city);
+      }
+
+      for (const k of this.karobariMembers) {
+        if (k.name && /[a-zA-Z]/.test(k.name)) k.name = await this.translitService.transliterateText(k.name);
+        if (k.city && /[a-zA-Z]/.test(k.city)) k.city = await this.translitService.transliterateText(k.city);
+      }
+
+      for (const d of this.donors) {
+        if (d.name && /[a-zA-Z]/.test(d.name)) d.name = await this.translitService.transliterateText(d.name);
+        if (d.city && /[a-zA-Z]/.test(d.city)) d.city = await this.translitService.transliterateText(d.city);
+      }
+
+      for (const t of this.programTimings) {
+        if (t.title && /[a-zA-Z]/.test(t.title)) t.title = await this.translitService.transliterateText(t.title);
+        if (t.value && /[a-zA-Z]/.test(t.value)) t.value = await this.translitService.transliterateText(t.value);
+      }
+
+      for (const g of this.committeeGroups) {
+        if (g.groupTitle && /[a-zA-Z]/.test(g.groupTitle)) g.groupTitle = await this.translitService.transliterateText(g.groupTitle);
+        for (const m of g.members) {
+          if (m.name && /[a-zA-Z]/.test(m.name)) m.name = await this.translitService.transliterateText(m.name);
+          if (m.role && /[a-zA-Z]/.test(m.role)) m.role = await this.translitService.transliterateText(m.role);
+        }
+      }
+
+      this.initSearchTerms();
+      this.onLayoutChanged();
+    } catch (e) {
+      console.error('Error during form transliteration', e);
+    } finally {
+      this.isTransliteratingAll = false;
+    }
+  }
+
   // Filter members for Autocomplete dropdown
   filteredMembers(searchTerm: string): Member[] {
     if (!searchTerm || !this.members.length) return [];
     const term = searchTerm.toLowerCase().trim();
+    const translitTerm = this.translitService.transliterateSync(term).toLowerCase().trim();
     return this.members.filter(m =>
       m.Name.toLowerCase().includes(term) ||
+      (translitTerm && m.Name.toLowerCase().includes(translitTerm)) ||
       m.Id.toLowerCase().includes(term) ||
-      m.City.toLowerCase().includes(term)
+      m.City.toLowerCase().includes(term) ||
+      (translitTerm && m.City.toLowerCase().includes(translitTerm))
     ).slice(0, 8); // Top 8 results for better layout
   }
 
@@ -426,10 +496,16 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.onLayoutChanged();
   }
 
-  selectYajmanMember(index: number, member: Member) {
-    this.yajmans[index].name = member.Name;
-    this.yajmans[index].city = member.City;
-    this.yajmanSearchTerms[index] = member.Name;
+  async selectYajmanMember(index: number, member: Member) {
+    let name = member.Name;
+    let city = member.City;
+    if (this.isAutoTransliterateEnabled && (/[a-zA-Z]/.test(name) || /[a-zA-Z]/.test(city))) {
+      name = await this.translitService.transliterateText(name);
+      city = await this.translitService.transliterateText(city);
+    }
+    this.yajmans[index].name = name;
+    this.yajmans[index].city = city;
+    this.yajmanSearchTerms[index] = name;
     this.activeYajmanSearchIndex = null;
     this.onLayoutChanged();
   }
@@ -450,10 +526,16 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.onLayoutChanged();
   }
 
-  selectKarobariMember(index: number, member: Member) {
-    this.karobariMembers[index].name = member.Name;
-    this.karobariMembers[index].city = member.City;
-    this.karobariSearchTerms[index] = member.Name;
+  async selectKarobariMember(index: number, member: Member) {
+    let name = member.Name;
+    let city = member.City;
+    if (this.isAutoTransliterateEnabled && (/[a-zA-Z]/.test(name) || /[a-zA-Z]/.test(city))) {
+      name = await this.translitService.transliterateText(name);
+      city = await this.translitService.transliterateText(city);
+    }
+    this.karobariMembers[index].name = name;
+    this.karobariMembers[index].city = city;
+    this.karobariSearchTerms[index] = name;
     this.activeKarobariSearchIndex = null;
     this.onLayoutChanged();
   }
@@ -474,10 +556,16 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.onLayoutChanged();
   }
 
-  selectDonorMember(index: number, member: Member) {
-    this.donors[index].name = member.Name;
-    this.donors[index].city = member.City;
-    this.donorSearchTerms[index] = member.Name;
+  async selectDonorMember(index: number, member: Member) {
+    let name = member.Name;
+    let city = member.City;
+    if (this.isAutoTransliterateEnabled && (/[a-zA-Z]/.test(name) || /[a-zA-Z]/.test(city))) {
+      name = await this.translitService.transliterateText(name);
+      city = await this.translitService.transliterateText(city);
+    }
+    this.donors[index].name = name;
+    this.donors[index].city = city;
+    this.donorSearchTerms[index] = name;
     this.activeDonorSearchIndex = null;
     this.onLayoutChanged();
   }
